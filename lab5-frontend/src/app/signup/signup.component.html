@@ -1,0 +1,12 @@
+<div align="center">
+  <div align="center" class="signupUser">
+    <h2> Sign up as a User </h2>
+    <form (submit)="signupUser(username.value, password.value)">
+      Email:<br><input #username type="text" placeholder="Email"><br><br>
+      Password:<br><input #password type="password" placeholder="Password"><br><br>
+      <input type="submit" value="Sign Up">
+    </form>
+    <br><button (click)="backToHome()"> Back to Home </button>
+  </div>
+  <p> Upon entering valid credentials, you will be redirected to the log in page. </p>
+</div>

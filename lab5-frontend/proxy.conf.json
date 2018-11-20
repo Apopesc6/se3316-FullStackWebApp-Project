@@ -1,0 +1,8 @@
+{
+    "/api": {
+        "target": "https://se3316-apopesc6-lab5-apopesc6.c9users.io:8081",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "info"
+    }
+}

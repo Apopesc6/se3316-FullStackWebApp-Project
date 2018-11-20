@@ -1,0 +1,11 @@
+<div align="center">
+  <div align="center" class="loginAdmin">
+    <h2> Log in as a Manager </h2>
+    <form (submit)="loginAdmin(username.value, password.value)">
+      Email:<br><input #username type="text" placeholder="Email"><br><br>
+      Password:<br><input #password type="password" placeholder="Password"><br><br>
+      <input type="submit" value="Log In">
+    </form>
+    <br><button (click)="backToHome()"> Back to Home </button>
+  </div>
+</div>
