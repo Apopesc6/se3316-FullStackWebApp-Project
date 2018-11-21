@@ -13,7 +13,9 @@ expressRouter.post('/createItem', (req, res) =>{
                 itemName: req.body.itemName,
                 itemQuantity:req.body.itemQuantity,
                 itemPrice:req.body.itemPrice,
-                itemTax:req.body.itemTax
+                itemTax:req.body.itemTax,
+                itemDesc:req.body.itemDesc,
+                itemBuyNo:req.body.itemBuyNo
             });
             //saves the item in the database
             addedItem.save().then(item => res.json(item)).catch(error => console.log(error));

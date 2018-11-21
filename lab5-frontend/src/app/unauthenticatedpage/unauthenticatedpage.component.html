@@ -2,4 +2,15 @@
 <button (click)="backToHome()"> Back to Home </button>
 <br>
 
-<h1>Item Catalog</h1><br>
+<h1>Item Catalog</h1>
+
+<ul>
+    <li *ngFor="let item of items; let j = index">
+        
+        <div class ="list">
+            {{item}}
+        </div>
+        
+        <button (click)="viewDesc(item)" class = "descbtn"> View Description </button>
+    </li>
+</ul>

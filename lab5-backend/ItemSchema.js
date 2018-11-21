@@ -22,6 +22,14 @@ var ItemInfo = new Schema({
      itemTax: {
         type: String,
         required: false
+    },
+     itemDesc: {
+        type: String,
+        required: true
+    },
+    itemBuyNo:{
+        type: String,
+        required:true
     }
     
 });
