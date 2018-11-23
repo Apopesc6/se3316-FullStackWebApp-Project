@@ -1,8 +1,5 @@
 .list{
   margin: 15px 0;
   width: 100px;
-}
-
-.descbtn{
-    
+  border: 2px solid blue;
 }

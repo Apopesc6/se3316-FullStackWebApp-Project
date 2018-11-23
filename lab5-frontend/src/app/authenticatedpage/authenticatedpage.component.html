@@ -2,8 +2,26 @@
 <button (click)="backToHome()"> Log Out </button>
 <br>
 
-<h1>Item Catalog</h1><br>
+<h1>Item Catalog</h1>
 
-<h1>Shopping Cart</h1><br>
+<ul>
+    <li *ngFor="let item of items; let j = index" (click)="viewDesc(item,j)">
+        
+        <div class ="list">
+            {{item}}
+        </div>
+        
+        
+        <div *ngIf = "descFound[j]==true">
+            <div>
+                <span>Description: {{itemDescription[j]}}</span>
+            </div>
+        </div>
+        
+    </li>
+</ul>
+
+
+<br><h1>Shopping Cart</h1><br>
 
 <h1>Item Collections</h1>

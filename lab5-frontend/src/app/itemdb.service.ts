@@ -16,6 +16,7 @@ export class ItemdbService {
   private Description:string = '';
   private AmountPurchased:string = '';
   
+  //Array for each item entry
   private itemArray: string[] = [];
   
   //stores the description for each item in a dictionary so it can be easily accessed by key later on.
@@ -56,15 +57,19 @@ export class ItemdbService {
   }
    
   
-  getDesc(itemDescName: string){
+  getDesc(itemDescName: string) : string{
     //Requires the name which acts as the key (used to find the description)
     
+    //Gets the item description from the dictionary
     var Desc = this.descArr[itemDescName];
     
-    console.log(Desc);
-    
+    return Desc;
   }
       
-      
+  
+  getItemArraySize():number{
+    return this.itemArray.length;
+  }
+  
 }
 

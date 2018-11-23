@@ -11,6 +11,7 @@ import { LoginComponent } from './login/login.component';
 import { ManagerpageComponent } from './managerpage/managerpage.component';
 import { SignupComponent } from './signup/signup.component';
 import { UnauthenticatedpageComponent } from './unauthenticatedpage/unauthenticatedpage.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { UnauthenticatedpageComponent } from './unauthenticatedpage/unauthentica
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
     HttpClientModule,
     RouterModule.forRoot([

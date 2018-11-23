@@ -4,6 +4,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var items = require('./ItemDatabase');
+var users = require('./LoginDatabase');
 var expressApp = express();
 
 //Using mongoose to connect to mongoDB
@@ -27,5 +28,8 @@ expressApp.use(bodyParser.urlencoded({extended:false}));
 expressApp.use(bodyParser.json());
 //Uses the api within the ItemDatabase.js file
 expressApp.use('/api/ItemDatabase', items);
+expressApp.use('/api/LoginDatabase', users);
+
+
 //Starts listnening
 expressApp.listen(8081);

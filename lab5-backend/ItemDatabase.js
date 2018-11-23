@@ -2,6 +2,8 @@ var express = require('express');
 var expressRouter = express.Router();
 //Uses the item schema
 var ItemSchema = require('./ItemSchema');
+var LoginSchema = require('./LoginSchema');
+
 
 //For creating items within the database
 expressRouter.post('/createItem', (req, res) =>{
@@ -82,5 +84,7 @@ expressRouter.get('/:item_name', (req,res) => {
    ItemSchema.findOne({itemName}).then(item => res.json(item)).catch(err => res.status(404).json({itemnotfound: 'Not item found'}));
    
 });
+
+
 
 module.exports = expressRouter;

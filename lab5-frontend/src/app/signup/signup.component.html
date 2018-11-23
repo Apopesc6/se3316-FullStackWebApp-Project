@@ -1,12 +1,16 @@
 <div align="center">
   <div align="center" class="signupUser">
     <h2> Sign up as a User </h2>
-    <form (submit)="signupUser(username.value, password.value)">
-      Email:<br><input #username type="text" placeholder="Email"><br><br>
-      Password:<br><input #password type="password" placeholder="Password"><br><br>
-      <input type="submit" value="Sign Up">
-    </form>
-    <br><button (click)="backToHome()"> Back to Home </button>
+          
+    <form #f = "ngForm">
+      Email:<br><input #username type="email" ngModel name = "email" placeholder="Email" required email><br><br>
+      Password:<br><input #password type="password" placeholder="Password" required password><br><br>
+      <button [disabled] = "!f.valid" (click)= "signupUser(username.value, password.value)"> Sign Up </button>
+      <p *ngIf="!f.valid">
+        Enter a valid email to sign up.
+      </p>
+    </form>      
+    <button (click)="backToHome()"> Back to Home </button>
   </div>
   <p> Upon entering valid credentials, you will be redirected to the log in page. </p>
 </div>
