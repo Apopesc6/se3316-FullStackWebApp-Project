@@ -9,6 +9,7 @@ export class AuthService {
   private successfulLogIn: boolean = false;
   private usernameAcc: string;
   private passwordAcc: string;
+  private activeAcc: boolean = false;
 
   constructor(private httpClient: HttpClient) { }
   
@@ -21,12 +22,12 @@ export class AuthService {
     this.httpClient.post(`api/LoginDatabase/createUser`, {
       //using the values passed in
       userName: username,
-      userPassword: password
+      userPassword: password,
+      isActive: true
       
     })
     .subscribe(
       (data:any[]) => {
-        //console.log(data);
           console.log(data);
       }
       )
@@ -41,6 +42,7 @@ export class AuthService {
           console.log(JSON.stringify(data));
           this.usernameAcc = data.userName;
           this.passwordAcc = data.userPassword;
+          this.activeAcc = data.isActive;
           
           if (this.passwordAcc == password){
             //if it finds the username, and the password entered is the same as the one stored in the database,
@@ -56,6 +58,9 @@ export class AuthService {
       return this.successfulLogIn;
   }
   
+  getActiveAcc(): boolean{
+      return this.activeAcc;
+  }
   getAdminDetails() {
     //Link to backend admin stuff here
   }

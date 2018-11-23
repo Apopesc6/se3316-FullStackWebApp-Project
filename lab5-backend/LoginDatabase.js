@@ -11,7 +11,8 @@ expressRouter.post('/createUser', (req, res) =>{
         if(!user){ //Gives it a name, quantity, price, and tax
             var addedUser = new LoginSchema({
                 userName: req.body.userName,
-                userPassword:req.body.userPassword
+                userPassword: req.body.userPassword,
+                isActive: req.body.isActive
                 
             });
             //saves the item in the database

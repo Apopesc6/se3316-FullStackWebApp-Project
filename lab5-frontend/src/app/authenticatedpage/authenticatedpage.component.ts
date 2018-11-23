@@ -54,6 +54,8 @@ export class AuthenticatedpageComponent implements OnInit {
   }
   
   backToHome() {
+    //goes back to the homepage, and resets the username stored in the string
+    this._itemdb.setUsername('');
     this._router.navigateByUrl('');
   }
   

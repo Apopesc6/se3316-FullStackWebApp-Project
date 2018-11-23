@@ -2,6 +2,16 @@
 <button (click)="backToHome()"> Log Out </button>
 <br>
 
-<h1>Item Catalog</h1><br>
+<h1>Item Catalog</h1>
+
+<h3>Add an Item to the Catalog:</h3>
+Name: <br><input #itemname type = "text" placeholder = "Item Name"><br>
+Quantity: <br><input #itemquan type = "text" placeholder = "Item Quantity"><br>
+Price: <br><input #itemprice type = "text" placeholder = "Item Price"><br>
+Tax: <br><input #itemtax type = "text" placeholder = "Item Tax"><br>
+Description: <br><input #itemdesc type = "text" placeholder = "Item Description"><br>
+Purchases: <br><input #itempurch type = "text" placeholder = "Item Purchases"><br>
+
+<br><button (click) = "addItem(itemname.value, itemquan.value, itemprice.value, itemtax.value, itemdesc.value, itempurch.value)">Add Item</button><br>
 
 <h1>Other Users</h1><br>
