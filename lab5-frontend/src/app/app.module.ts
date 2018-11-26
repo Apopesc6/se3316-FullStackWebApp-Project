@@ -51,7 +51,7 @@ import {FormsModule} from '@angular/forms';
         component: UnauthenticatedpageComponent
       },
       {
-        path: 'Auth',
+        path: 'Auth/:id',
         component: AuthenticatedpageComponent
       },
       {

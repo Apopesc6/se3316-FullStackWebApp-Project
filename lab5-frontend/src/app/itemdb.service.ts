@@ -8,7 +8,6 @@ import {HttpClient} from '@angular/common/http';
 
 export class ItemdbService {
   
-  private username: string = '';
   private Price: string = '';
   private Tax: string = '';
   private Quantity: string = '';
@@ -32,6 +31,7 @@ export class ItemdbService {
   
 
   constructor(private httpClient: HttpClient) { }
+  
   
   getItems() :string[]{
     
@@ -58,8 +58,6 @@ export class ItemdbService {
             //push the amount bought into an array
             this.buyNo.push(amountPurchasedInt);
             
-            
-            
             //Adds each item into a single string
             var stringEntry = ("Name: " +this.Name+ " Price: $" +this.Price+ " Tax: " +this.Tax+ "% Quantity: "+this.Quantity+ " # of Buys: " +this.AmountPurchased);
             
@@ -83,11 +81,12 @@ export class ItemdbService {
       this.itemArray.push (this.buyNoDict[sortedPurchases[i]]);
     }
     
-    }, 500);
+    }, 1000);
     
     return this.itemArray;
     
   }
+   
    
   //used by the manager to add items to the catalog
   addItem(name:string, quantity:string, price:string, tax:string, description:string, purchases:string){
@@ -112,8 +111,6 @@ export class ItemdbService {
   }
     
   
-  
-  
   getDesc(itemDescName: string) : string{
     //Requires the name which acts as the key (used to find the description)
     
@@ -124,17 +121,11 @@ export class ItemdbService {
   }
       
       
-      
-  
   getItemArraySize():number{
     return this.itemArray.length;
   }
   
   
-  setUsername(accname:string){
-    console.log (accname);
-    this.username = accname;
-  }
   
 }
 

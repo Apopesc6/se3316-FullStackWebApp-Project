@@ -14,4 +14,23 @@ Purchases: <br><input #itempurch type = "text" placeholder = "Item Purchases"><b
 
 <br><button (click) = "addItem(itemname.value, itemquan.value, itemprice.value, itemtax.value, itemdesc.value, itempurch.value)">Add Item</button><br>
 
+<h3>Catalog: </h3>
+
+<ul>
+    <li *ngFor="let item of items; let j = index">
+        
+        <div class ="list" (click)="viewDesc(item,j)">
+            {{item}}
+        </div>
+        
+        
+        <div *ngIf = "descFound[j]==true">
+            <div>
+                <span>Description: {{itemDescription[j]}}</span>
+            </div>
+        </div>
+        
+    </li>
+</ul>
+
 <h1>Other Users</h1><br>

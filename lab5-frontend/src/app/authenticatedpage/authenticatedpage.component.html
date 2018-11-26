@@ -5,16 +5,31 @@
 <h1>Item Catalog</h1>
 
 <ul>
-    <li *ngFor="let item of items; let j = index" (click)="viewDesc(item,j)">
+    <li *ngFor="let item of items; let j = index" >
         
-        <div class ="list">
+        <div class ="list" (click)="viewDesc(item,j)">
             {{item}}
         </div>
         
         
+        <div class ="rating">
+            <span>Add a Comment/Rating:</span><br>
+            <input #comment type="text" placeholder= "Comment"><br>
+            <input #rating type = "number" id = "ratingnum"> /5 <br>
+            <button (click) = "addRating(item, comment.value, rating.value)"> Add Rating </button>
+        </div>
+        
+        <br> <input #quantity type = "number" placeholder = "Quantity">
+        <button (click) = "addtoCart(quantity.value)"> Add to Cart </button> <br> <br>
+        
         <div *ngIf = "descFound[j]==true">
-            <div>
-                <span>Description: {{itemDescription[j]}}</span>
+            <div id = "descContainer">
+                <strong>Description: </strong><br>
+                <span>{{itemDescription[j]}}</span><br><br>
+                <div id = "Ratings">
+                    <strong>Ratings: </strong><br>
+                    <span> {{ratingArr[j]}}</span> 
+                </div>
             </div>
         </div>
         

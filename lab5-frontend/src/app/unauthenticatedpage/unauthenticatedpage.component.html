@@ -5,9 +5,9 @@
 <h1>Item Catalog</h1>
 
 <ul>
-    <li *ngFor="let item of items; let j = index" (click)="viewDesc(item,j)">
+    <li *ngFor="let item of items; let j = index">
         
-        <div class ="list">
+        <div class ="list" (click)="viewDesc(item,j)">
             {{item}}
         </div>
         

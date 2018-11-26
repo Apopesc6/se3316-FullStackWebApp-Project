@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {AuthService} from '../auth.service';
-import {ItemdbService} from '../itemdb.service';
+
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  providers: [AuthService, ItemdbService]
+  providers: [AuthService]
 })
 export class LoginComponent implements OnInit {
   
@@ -16,11 +16,13 @@ export class LoginComponent implements OnInit {
   successfulLogIn:boolean = false;
   activeAcc:boolean = false;
   
-  constructor(private _router: Router, private _auth: AuthService, private _item:ItemdbService) { }
+  constructor(private _router: Router, private _auth: AuthService) { }
 
   ngOnInit() {
+    
   }
   
+  //when the user clicks the log in button
   loginUser(username: string, password: string) {
     
     this.usernameAcc = username;
@@ -39,8 +41,8 @@ export class LoginComponent implements OnInit {
       if (this.successfulLogIn == true && this.activeAcc == true){
         
         alert ("Successful login, routing to main page.");
-        this._item.setUsername(username);
-        this._router.navigateByUrl('/Auth');
+        
+        this._router.navigateByUrl('/Auth/'+this.usernameAcc);
        
       //Otherwise it does not allow logins  
       }else if (this.successfulLogIn == true && this.activeAcc == false){
@@ -53,7 +55,7 @@ export class LoginComponent implements OnInit {
         
       };
       
-    }, 500);
+    }, 1000);
     
     
   }

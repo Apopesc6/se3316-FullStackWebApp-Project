@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -10,6 +11,7 @@ export class AuthService {
   private usernameAcc: string;
   private passwordAcc: string;
   private activeAcc: boolean = false;
+  
 
   constructor(private httpClient: HttpClient) { }
   
@@ -33,6 +35,8 @@ export class AuthService {
       )
   }
   
+  
+  
   //Used to get if the user log in is correct
   getUserDetails(username: string, password: string){
     
@@ -53,6 +57,8 @@ export class AuthService {
       )
 
   }
+  
+  
 
   getSuccessfulLogin(): boolean{
       return this.successfulLogIn;
@@ -64,4 +70,7 @@ export class AuthService {
   getAdminDetails() {
     //Link to backend admin stuff here
   }
+  
+  
+  
 }

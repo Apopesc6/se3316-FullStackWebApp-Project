@@ -3,3 +3,23 @@
   width: 100px;
   border: 2px solid blue;
 }
+
+.rating{
+  margin-top:-100px;
+  margin-left: 110px;
+  width: 200px;
+  border: 2px solid black;
+}
+
+#ratingnum{
+  width:30px;
+}
+
+#Ratings{
+  width:200px;
+}
+
+#descContainer{
+  border: 2px solid red;
+  width:220px;
+}
