@@ -57,7 +57,6 @@ export class RatingdbService {
             
             if (this.Name == itemname){ //if the item name is the same as the one passed in, it adds to an array
                 
-              
               var stringEntry = (this.Acc+  ":  " +this.Comm+ " - " +this.Rate+ "/5, ");
           
               this.ratingArray.push(stringEntry);

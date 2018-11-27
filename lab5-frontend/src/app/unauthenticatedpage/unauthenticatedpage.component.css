@@ -3,3 +3,12 @@
   width: 100px;
   border: 2px solid blue;
 }
+
+#Ratings{
+  width:200px;
+}
+
+#descContainer{
+  border: 2px solid red;
+  width:220px;
+}

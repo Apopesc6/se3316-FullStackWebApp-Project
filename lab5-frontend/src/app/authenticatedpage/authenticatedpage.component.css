@@ -11,6 +11,17 @@
   border: 2px solid black;
 }
 
+.shopList{
+   margin: 15px 0;
+   border: 2px solid blue;
+   width: 450px;
+}
+
+.shoppingcart{
+  border: 2px solid black;
+  width: 550px;
+}
+
 #ratingnum{
   width:30px;
 }
@@ -22,4 +33,13 @@
 #descContainer{
   border: 2px solid red;
   width:220px;
+}
+
+#subtotal{
+  border: 2px solid yellow;
+  background-color:yellow;
+}
+
+#clear{
+  margin-right: 397px;
 }

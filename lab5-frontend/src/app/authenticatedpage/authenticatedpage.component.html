@@ -20,7 +20,7 @@
         </div>
         
         <br> <input #quantity type = "number" placeholder = "Quantity">
-        <button (click) = "addtoCart(quantity.value)"> Add to Cart </button> <br> <br>
+        <button (click) = "addtoCart(item, quantity.value, j)"> Add to Cart </button> <br> <br>
         
         <div *ngIf = "descFound[j]==true">
             <div id = "descContainer">
@@ -37,6 +37,21 @@
 </ul>
 
 
-<br><h1>Shopping Cart</h1><br>
+<br><h1>Shopping Cart</h1>
+<div class = "shoppingcart">
+    <ul>
+        <li *ngFor="let shop of shoppingCart; let i = index">
+            <div class = "shopList">
+                {{shop}} 
+            </div>
+            <button (click) = "deletefromCart(shop,i)"> Delete From Cart </button>
+        </li>
+    </ul>
 
-<h1>Item Collections</h1>
+    <br><span id="subtotal"> Subtotal: ${{subtotal}}</span><br><br>
+    <button id = "clear"(click) = "clearCart()"> Clear Cart </button>
+    <button (click) = "buy()"> Buy Items</button>
+</div>
+
+
+<br><h1>Item Collections</h1>

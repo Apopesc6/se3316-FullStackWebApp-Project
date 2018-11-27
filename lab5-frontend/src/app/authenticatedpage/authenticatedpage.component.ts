@@ -1,20 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ItemdbService } from '../itemdb.service';
-import {AuthService} from '../auth.service';
 import {RatingdbService} from '../ratingdb.service';
 
 @Component({
   selector: 'app-authenticatedpage',
   templateUrl: './authenticatedpage.component.html',
   styleUrls: ['./authenticatedpage.component.css'],
-  providers: [ItemdbService, AuthService, RatingdbService]
+  providers: [ItemdbService, RatingdbService]
 })
 export class AuthenticatedpageComponent implements OnInit {
   
   items;
   
   ratings;
+  
+  itemQuantityArr:string[] =[];
+  itemSalesArr:string[] = [];
+  
+  shoppingCart:string[] = [];
+  quantityShopArr:string[] = [];
+  shoppingIndexArr:number[] = [];
+  subtotal: number = 0;
   
   ratingArr: string[] = [];
   itemDescription: string[] = [];
@@ -36,16 +43,24 @@ export class AuthenticatedpageComponent implements OnInit {
     //waits 1s for the http request
     setTimeout(() => {
       this.listSize = this._itemdb.getItemArraySize();
+      
+      for(var i = 0;i<this.listSize;i++){
+         //filling the quantity array with the quantity of each item
+        this.itemQuantityArr[i] = this.items[i].substr((this.items[i].indexOf('%')+12), (this.items[i].indexOf(' ')-2));
+        //filling the sales array with the sales of each item
+        this.itemSalesArr[i] = this.items[i].substr((this.items[i].indexOf('#')+11),this.items[i].length);
+      }
+      
     }, 1000);
     
-    
-    
-  //fills the boolean array with false initially to show  
+   
    var num:number = 0;
     for(num=0;num<=this.listSize;num++) {
+      //fills the boolean array with false initially to hide all descriptions 
       this.descFound[num]=false;
     }
   }
+  
   
   
   //when a user clicks on an item to view the description
@@ -87,12 +102,11 @@ export class AuthenticatedpageComponent implements OnInit {
     };
     
     this.itemIndex = listIndex;
-    
-    
-    
   }
   
   
+  
+  //When the user clicks the add rating button
   addRating (item, comment:string, rating: number){
     
     //gets the url of the page
@@ -116,6 +130,116 @@ export class AuthenticatedpageComponent implements OnInit {
     };
     
   }
+  
+  
+  
+  addtoCart(item, quantity:number, index: number){
+    
+    //stores the index of the item added to the cart for later use
+    this.shoppingIndexArr.push(index);
+    
+    //gets the name of the item using substring of the whole item string
+    var nameString = item.substr(6, (item.indexOf('$')-14));
+    
+    //gets the current amount in stock using substring and converting to number of the item string (this is a lot faster than accessing the backend)
+    var currentQuan = Number(item.substr((item.indexOf('%')+12), (item.indexOf(' ')-2)));
+    
+    //getting price
+    var price = Number(item.substr((item.indexOf('$')+1), (item.indexOf(' ')-1)));
+    
+    //getting tax
+    var tax = Number(item.substr((item.indexOf('%')-2), (item.indexOf(' ')-3)));
+    
+    
+    //if the quantity is less than 1 or greater than the amount in stock, it asks the user to enter a valid quantity.
+    if (quantity < 1 || quantity> currentQuan){
+      alert ("Please enter a quantity between 1 and the current amount in stock.");
+    }else{
+      
+      //calculating total price
+      var totalPrice: number = (price*quantity);
+      totalPrice = Math.round(totalPrice*100)/100;
+      //calculating price after tax
+      var priceAfterTax: number = (totalPrice + (totalPrice * tax/100));
+      priceAfterTax = Math.round(priceAfterTax*100)/100;
+      
+      //put it into a string entry and push it to the array that holds all the shopping cart items
+      var stringEntry = (nameString + ", Quantity: "+quantity +"; Price: $"+ totalPrice + ", Price after Tax - $" +priceAfterTax);
+      this.shoppingCart.push(stringEntry);
+      
+      //store the quantity of each shopping cart item for later use
+      this.quantityShopArr.push(quantity.toString());
+      
+      //update the subtotal
+      this.subtotal = Math.round((this.subtotal + priceAfterTax)*100)/100;
+    }
+    
+  }
+  
+  
+  
+  
+  deletefromCart(shop, index:number){
+    
+    //getting the price of the item
+    var priceofItem = Number(shop.substr((shop.indexOf('-')+3),shop.length));
+    
+    //subtracting it from the subtotal
+    this.subtotal = Math.round((this.subtotal - priceofItem)*100)/100;
+    
+    //removing the entry from the shopping cart array that is displayed on screen
+    this.shoppingCart.splice(index,1);
+    this.quantityShopArr.splice(index,1);
+    this.shoppingIndexArr.splice(index,1);
+  }
+  
+  
+  
+  clearCart(){
+    //empties the shopping cart array and resets the subtotal
+    this.quantityShopArr = [];
+    this.shoppingCart = [];
+    this.shoppingIndexArr = [];
+    this.subtotal = 0;
+  }
+  
+  
+  
+  buy(){
+    
+    //getting the item quantity and item name
+    
+    for (var i = 0; i < this.shoppingCart.length; i++){
+      var stringEntry = this.shoppingCart[i];
+      var itemName = stringEntry.substr(0, (stringEntry.indexOf(',')));
+      var itemQuantity = this.quantityShopArr[i];
+    
+      var newQuantity = Number(this.itemQuantityArr[this.shoppingIndexArr[i]]) - Number(itemQuantity);
+      var newQuantitySt = newQuantity.toString();
+    
+      var newSales = Number(this.itemSalesArr[this.shoppingIndexArr[i]]) + Number(itemQuantity);
+      var newSalesSt = newSales.toString();
+    
+      console.log ("Name: " + itemName+ " New quantity: " + newQuantity+ " New Sales: "+newSales);
+    
+      this._itemdb.updateItemQuantity(itemName,newQuantitySt);
+      this._itemdb.updateItemSales(itemName, newSalesSt);
+    };
+    
+    this.shoppingIndexArr = [];
+    this.quantityShopArr = [];
+    this.shoppingCart = [];
+    this.subtotal = 0;
+    
+    alert ("Thank you for Buying! Updated item sales and item quantities.");
+    
+    setTimeout(() => {
+
+    window.location.reload();
+    
+    }, 2000);
+  }
+  
   
   
   //When the user clicks log out

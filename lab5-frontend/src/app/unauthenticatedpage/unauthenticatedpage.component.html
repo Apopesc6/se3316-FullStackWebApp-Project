@@ -13,8 +13,13 @@
         
         
         <div *ngIf = "descFound[j]==true">
-            <div>
-                <span>Description: {{itemDescription[j]}}</span>
+            <div id = "descContainer">
+                <strong>Description: </strong><br>
+                <span>{{itemDescription[j]}}</span><br><br>
+                <div id = "Ratings">
+                    <strong>Ratings: </strong><br>
+                    <span> {{ratingArr[j]}}</span> 
+                </div>
             </div>
         </div>
         

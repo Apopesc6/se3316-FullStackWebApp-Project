@@ -70,6 +70,23 @@ expressRouter.post('/updateItemQuantity' , (req,res) =>{
    });
 });
 
+
+
+expressRouter.post('/updateItemSales' , (req,res) =>{
+   
+   var itemName = req.body.itemName;
+   //Find item by its name 
+   ItemSchema.findOne({itemName})
+   .then(item => {
+       //If the item is in the database, then it is able to be altered
+       if(item){
+           item.updateOne({itemBuyNo: req.body.itemBuyNo}).then(item => res.json(item));
+       }
+   });
+});
+
+
+
 //For finding all of the items
 expressRouter.get('/allItems', (req, res) => {
     ItemSchema.find().then(items => res.json(items)).catch(err => res.status(404));

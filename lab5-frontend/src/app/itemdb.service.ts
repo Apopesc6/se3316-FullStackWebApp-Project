@@ -113,7 +113,6 @@ export class ItemdbService {
   
   getDesc(itemDescName: string) : string{
     //Requires the name which acts as the key (used to find the description)
-    
     //Gets the item description from the dictionary
     var Desc = this.descArr[itemDescName];
     
@@ -123,6 +122,40 @@ export class ItemdbService {
       
   getItemArraySize():number{
     return this.itemArray.length;
+  }
+  
+  
+  updateItemQuantity(name: string, quantity: string){
+    this.httpClient.post(`api/ItemDatabase/updateItemQuantity`, {
+      //using the values passed in
+      itemName: name,
+      itemQuantity: quantity
+      
+    })
+    .subscribe(
+      (data:any) => {
+        //console.log(data);
+          console.log(data);
+      }
+      )
+    
+  }
+    
+  
+  
+  updateItemSales(name: string, sales: string){
+    this.httpClient.post(`api/ItemDatabase/updateItemSales`, {
+      //using the values passed in
+      itemName: name,
+      itemBuyNo: sales
+      
+    })
+    .subscribe(
+      (data:any) => {
+        //console.log(data);
+          console.log(data);
+      }
+      )
   }
   
   
