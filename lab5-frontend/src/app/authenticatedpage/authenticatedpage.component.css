@@ -22,6 +22,17 @@
   width: 550px;
 }
 
+.addtoColl{
+  border: 2px solid black;
+  width: 550px;
+}
+
+.unsavedColl{
+  margin: 15px 0;
+  border: 2px solid blue;
+  width: 450px;
+}
+
 #ratingnum{
   width:30px;
 }
@@ -42,4 +53,12 @@
 
 #clear{
   margin-right: 397px;
+}
+
+#addtocart{
+  margin-right: 20px;
+}
+
+#isPublic{
+  margin-right: 110px;
 }

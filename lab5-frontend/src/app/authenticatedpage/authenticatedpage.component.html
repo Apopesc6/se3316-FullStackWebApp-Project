@@ -20,7 +20,10 @@
         </div>
         
         <br> <input #quantity type = "number" placeholder = "Quantity">
-        <button (click) = "addtoCart(item, quantity.value, j)"> Add to Cart </button> <br> <br>
+        <button id= "addtocart" (click) = "addtoCart(item, quantity.value, j)"> Add to Cart </button> 
+        <button (click) = "addtoCollection(item, j)"> Add to Collection </button> 
+        
+        <br> <br>
         
         <div *ngIf = "descFound[j]==true">
             <div id = "descContainer">
@@ -55,3 +58,26 @@
 
 
 <br><h1>Item Collections</h1>
+
+<div class = "addtoColl">
+    <h2>Add to Collections: </h2>
+    Name Collection: <input #collName type = "text" placeholder = "Collection Name"> <br> <br>
+    
+    <ul>
+        <li *ngFor="let unsaved of unsavedColl; let f = index">
+            <div class = "unsavedColl">
+                {{unsaved}} 
+            </div>
+            <button (click) = "deletefromCollection(f)"> Delete From Collection </button>
+        </li>
+    </ul>
+    
+    <br> Is this collection public? <input #isPublic type = "text" id = "isPublic" placeholder = "Type 'yes' or 'no' ">
+    <button (click) = "saveCollection(collName.value, isPublic.value)"> Save Collection</button>
+</div>
+
+
+
+<br><h2>Your Collections: </h2>
+
+<br><h2>Other Public Collections: </h2>

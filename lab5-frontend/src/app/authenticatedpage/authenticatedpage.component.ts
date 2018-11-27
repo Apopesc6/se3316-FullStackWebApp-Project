@@ -2,18 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ItemdbService } from '../itemdb.service';
 import {RatingdbService} from '../ratingdb.service';
+import {CollectiondbService} from '../collectiondb.service';
 
 @Component({
   selector: 'app-authenticatedpage',
   templateUrl: './authenticatedpage.component.html',
   styleUrls: ['./authenticatedpage.component.css'],
-  providers: [ItemdbService, RatingdbService]
+  providers: [ItemdbService, RatingdbService, CollectiondbService]
 })
 export class AuthenticatedpageComponent implements OnInit {
   
   items;
   
   ratings;
+  
+  unsavedColl: string[] = [];
   
   itemQuantityArr:string[] =[];
   itemSalesArr:string[] = [];
@@ -32,11 +35,17 @@ export class AuthenticatedpageComponent implements OnInit {
   loggedinAcc: string;
   itemName: string;
 
-  constructor(private _router: Router, private _itemdb: ItemdbService, private _ratingdb: RatingdbService) { }
+  constructor(private _router: Router, private _itemdb: ItemdbService, private _ratingdb: RatingdbService, private _collectiondb: CollectiondbService) { }
   
   
   //When the page is initialized, it loads item catalog
   ngOnInit() {
+    
+    //gets the url of the page
+    var url = this._router.url;
+    
+    //gets the username from the url of the page
+    this.loggedinAcc = url.substr((url.indexOf('-')+7), url.length);
     
     this.items = this._itemdb.getItems();
 
@@ -108,12 +117,6 @@ export class AuthenticatedpageComponent implements OnInit {
   
   //When the user clicks the add rating button
   addRating (item, comment:string, rating: number){
-    
-    //gets the url of the page
-    var url = this._router.url;
-    
-    //gets the username from the url of the page
-    this.loggedinAcc = url.substr((url.indexOf('-')+7), url.length);
     
     //gets the itemname from using substring on the list item
     var itemname = item.substr(6, (item.indexOf('$')-14));
@@ -196,7 +199,7 @@ export class AuthenticatedpageComponent implements OnInit {
   
   
   clearCart(){
-    //empties the shopping cart array and resets the subtotal
+    //empties the arrays needed to manage the shopping cart and resets the subtotal
     this.quantityShopArr = [];
     this.shoppingCart = [];
     this.shoppingIndexArr = [];
@@ -206,24 +209,27 @@ export class AuthenticatedpageComponent implements OnInit {
   
   
   buy(){
-    
-    //getting the item quantity and item name
-    
+
+    //for loop the length of how many items are in the shopping cart
     for (var i = 0; i < this.shoppingCart.length; i++){
+      //gets the item name and quantity of the individual shopping cart entry
       var stringEntry = this.shoppingCart[i];
       var itemName = stringEntry.substr(0, (stringEntry.indexOf(',')));
       var itemQuantity = this.quantityShopArr[i];
     
+      //gets the new quantity of the item by subtracting the old quantity stored in an array, with the quantity in the shopping cart
       var newQuantity = Number(this.itemQuantityArr[this.shoppingIndexArr[i]]) - Number(itemQuantity);
       var newQuantitySt = newQuantity.toString();
-    
+      
+      //gets the new sales of the item by adding the old sales stored in an array with the quantity in the shopping cart
       var newSales = Number(this.itemSalesArr[this.shoppingIndexArr[i]]) + Number(itemQuantity);
       var newSalesSt = newSales.toString();
-    
-      console.log ("Name: " + itemName+ " New quantity: " + newQuantity+ " New Sales: "+newSales);
-    
+      
+      //updates the quantity and sales in the database of the item 
       this._itemdb.updateItemQuantity(itemName,newQuantitySt);
       this._itemdb.updateItemSales(itemName, newSalesSt);
+      
+      //does this for each item in the shopping cart
     };
     
     this.shoppingIndexArr = [];
@@ -234,12 +240,72 @@ export class AuthenticatedpageComponent implements OnInit {
     alert ("Thank you for Buying! Updated item sales and item quantities.");
     
     setTimeout(() => {
-
+    
+    //reloads the page to update the catalog based on the new database quantities and sales of items
     window.location.reload();
     
     }, 2000);
   }
   
+  
+  
+  addtoCollection(item, index: number){
+    
+    var nameString = item.substr(6, (item.indexOf('$')-14));
+    
+    var desc = this._itemdb.getDesc(nameString);
+    
+    var quan = this.itemQuantityArr[index];
+    
+    var stringEntry = (nameString + ", Description: " +desc+ ", Quantity " +quan );
+    
+    this.unsavedColl.push(stringEntry);
+  }
+  
+  
+  deletefromCollection(index: number){
+    this.unsavedColl.splice(index,1);
+  }
+  
+  
+  saveCollection(collectionName: string, isPubStr:string){
+    
+    var isPublic: boolean = false;
+    
+    if(collectionName == ""){
+      alert ("Please enter a name for the collection");
+    } else if (isPubStr != "yes" && isPubStr !="no"){
+      alert ("Please enter 'yes' or 'no' to determine whether the collection is public or not.");
+    } else {
+      
+      var stringEntry = "";
+      
+      if(isPubStr = 'yes'){
+        isPublic = true;
+      }else if (isPubStr = 'no'){
+        isPublic = false;
+      };
+      
+      for (var i = 0; i < this.unsavedColl.length; i++){
+        
+        if(i == 0){
+          stringEntry = ("["+ this.unsavedColl[i] + "], ");
+        }else if(i==this.unsavedColl.length-1){
+          stringEntry = (stringEntry + "[" + this.unsavedColl[i] + "] ");
+        }else{
+          stringEntry = (stringEntry + "[" + this.unsavedColl[i] + "], ");
+        };
+        
+      };
+      
+    this._collectiondb.saveCollection(this.loggedinAcc, collectionName, isPublic, stringEntry);
+    
+    this.unsavedColl = [];
+    
+    
+    };
+    
+  }
   
   
   //When the user clicks log out

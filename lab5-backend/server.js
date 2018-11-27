@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var items = require('./ItemDatabase');
 var users = require('./LoginDatabase');
 var ratings = require('./RatingDatabase');
+var collections = require('./CollectionDatabase');
 var expressApp = express();
 
 //Using mongoose to connect to mongoDB
@@ -31,6 +32,7 @@ expressApp.use(bodyParser.json());
 expressApp.use('/api/ItemDatabase', items);
 expressApp.use('/api/LoginDatabase', users);
 expressApp.use('/api/RatingDatabase', ratings);
+expressApp.use('/api/CollectionDatabase', collections);
 
 
 //Starts listnening

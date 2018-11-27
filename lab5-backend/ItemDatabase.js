@@ -2,7 +2,7 @@ var express = require('express');
 var expressRouter = express.Router();
 //Uses the item schema
 var ItemSchema = require('./ItemSchema');
-var LoginSchema = require('./LoginSchema');
+
 
 
 //For creating items within the database
