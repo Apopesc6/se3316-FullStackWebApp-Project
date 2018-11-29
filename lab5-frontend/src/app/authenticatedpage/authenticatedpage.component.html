@@ -21,7 +21,7 @@
         
         <br> <input #quantity type = "number" placeholder = "Quantity">
         <button id= "addtocart" (click) = "addtoCart(item, quantity.value, j)"> Add to Cart </button> 
-        <button (click) = "addtoCollection(item, j)"> Add to Collection </button> 
+        <button (click) = "addtoCollection(item, j, quantity.value)"> Add to Collection </button> 
         
         <br> <br>
         
@@ -78,6 +78,38 @@
 
 
 
-<br><h2>Your Collections: </h2>
+<br><br><h2>Your Collections: </h2>
+
+<ul>
+    <li *ngFor="let name of userCollName; let t = index">
+        <div class = "savedColl">
+            <div id = "collectionTitle">
+                {{name}}
+            </div>
+             
+         <br>
+             <div id = "collectionData">
+                 {{userCollData[t]}}
+             </div>
+        </div>
+    </li>
+</ul>
+    
+
 
 <br><h2>Other Public Collections: </h2>
+
+<ul>
+    <li *ngFor="let title of pubCollName; let g = index">
+        <div class = "savedColl">
+            <div id = "collectionTitle">
+                {{title}}
+            </div>
+             
+         <br>
+             <div id = "collectionData">
+                 {{pubCollData[g]}}
+             </div>
+        </div>
+    </li>
+</ul>

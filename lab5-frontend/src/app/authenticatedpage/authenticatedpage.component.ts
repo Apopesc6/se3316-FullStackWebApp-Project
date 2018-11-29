@@ -16,6 +16,12 @@ export class AuthenticatedpageComponent implements OnInit {
   
   ratings;
   
+  userCollName: string[] = [];
+  userCollData: string[] = [];
+  
+  pubCollName: string[] = [];
+  pubCollData: string[] = [];
+  
   unsavedColl: string[] = [];
   
   itemQuantityArr:string[] =[];
@@ -48,9 +54,22 @@ export class AuthenticatedpageComponent implements OnInit {
     this.loggedinAcc = url.substr((url.indexOf('-')+7), url.length);
     
     this.items = this._itemdb.getItems();
+    
+    this._collectiondb.getUserCollections(this.loggedinAcc);
+    this._collectiondb.getPublicCollections();
 
     //waits 1s for the http request
     setTimeout(() => {
+      
+      this.pubCollName = this._collectiondb.getPubCollectionsNameArr();
+      this.pubCollData = this._collectiondb.getPubCollectionsDataArr();
+      
+      this.userCollName = this._collectiondb.getUserCollectionsNameArr();
+      this.userCollData = this._collectiondb.getUserCollectionsDataArr();
+      
+      console.log(this.userCollName);
+      console.log(this.userCollData);
+      
       this.listSize = this._itemdb.getItemArraySize();
       
       for(var i = 0;i<this.listSize;i++){
@@ -249,21 +268,22 @@ export class AuthenticatedpageComponent implements OnInit {
   
   
   
-  addtoCollection(item, index: number){
+  addtoCollection(item, index: number, quan: number){
     
+    //gets the name of the item
     var nameString = item.substr(6, (item.indexOf('$')-14));
     
+    //gets the description of the item from the entry
     var desc = this._itemdb.getDesc(nameString);
-    
-    var quan = this.itemQuantityArr[index];
-    
+    //creates a string entry
     var stringEntry = (nameString + ", Description: " +desc+ ", Quantity " +quan );
-    
+    //pushes it to the array that shows the unsaved collection at the bottom of the screen
     this.unsavedColl.push(stringEntry);
   }
   
   
   deletefromCollection(index: number){
+    //removes from the unsaved collection
     this.unsavedColl.splice(index,1);
   }
   
@@ -272,6 +292,7 @@ export class AuthenticatedpageComponent implements OnInit {
     
     var isPublic: boolean = false;
     
+    //forces the user to enter a name for the collection and specify if it is public or not
     if(collectionName == ""){
       alert ("Please enter a name for the collection");
     } else if (isPubStr != "yes" && isPubStr !="no"){
@@ -280,12 +301,13 @@ export class AuthenticatedpageComponent implements OnInit {
       
       var stringEntry = "";
       
-      if(isPubStr = 'yes'){
+      if(isPubStr == 'yes'){
         isPublic = true;
-      }else if (isPubStr = 'no'){
+      }else if (isPubStr =='no'){
         isPublic = false;
       };
       
+      //pushes all of the unsaved collection into a single string that is stored in the database
       for (var i = 0; i < this.unsavedColl.length; i++){
         
         if(i == 0){
@@ -297,7 +319,8 @@ export class AuthenticatedpageComponent implements OnInit {
         };
         
       };
-      
+    
+    //calls the function in the service that stores the collection in the database  
     this._collectiondb.saveCollection(this.loggedinAcc, collectionName, isPublic, stringEntry);
     
     this.unsavedColl = [];

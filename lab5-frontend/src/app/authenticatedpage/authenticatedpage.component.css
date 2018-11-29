@@ -33,6 +33,22 @@
   width: 450px;
 }
 
+.savedColl{
+  width:600px;
+  
+}
+
+#collectionTitle{
+  width: 600px;
+  border: 2px solid red;
+}
+
+#collectionData{
+  width: 600px;
+  border: 2px solid black;
+  margin-bottom: 55px;
+}
+
 #ratingnum{
   width:30px;
 }
