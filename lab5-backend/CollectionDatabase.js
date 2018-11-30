@@ -21,6 +21,40 @@ expressRouter.post('/createCollection', (req, res) =>{
     });
 });
 
+
+expressRouter.post('/updateCollName' , (req,res) =>{
+   
+   var oldName = req.body.oldName;
+   var newName = req.body.newName;
+   
+   //Find item by its name 
+   CollectionSchema.findOne({collectionName: oldName})
+   .then(collection => {
+       //If the item is in the database, then it is able to be altered
+       if(collection){
+           collection.updateOne({collectionName: newName}).then(collection => res.json(collection));
+       }
+   });
+});
+
+
+//For deleting the items
+expressRouter.delete('/deleteCollection/:collection_name', (req, res) => {
+
+    var collectiondelName = req.params.collection_name;
+    
+   //Find item by its name 
+   CollectionSchema.findOne({collectionName: collectiondelName})
+   .then(collection => {
+       //If the item is in the database, then it is able to be removed
+       if(collection){
+           collection.remove().then( () => res.json({success: true}));
+       }
+       
+   });
+});
+
+
 //For finding all of the items
 expressRouter.get('/allCollections', (req, res) => {
     CollectionSchema.find().then(collections => res.json(collections)).catch(err => res.status(404));

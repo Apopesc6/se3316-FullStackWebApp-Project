@@ -16,6 +16,10 @@ export class AuthenticatedpageComponent implements OnInit {
   
   ratings;
   
+  itemQuanDict = {};
+  itemPriceDict = {};
+  itemTaxDict = {};
+  
   userCollName: string[] = [];
   userCollData: string[] = [];
   
@@ -50,8 +54,10 @@ export class AuthenticatedpageComponent implements OnInit {
     //gets the url of the page
     var url = this._router.url;
     
+    
     //gets the username from the url of the page
-    this.loggedinAcc = url.substr((url.indexOf('-')+7), url.length);
+    
+    this.loggedinAcc = url.substring(6,url.length);
     
     this.items = this._itemdb.getItems();
     
@@ -67,19 +73,37 @@ export class AuthenticatedpageComponent implements OnInit {
       this.userCollName = this._collectiondb.getUserCollectionsNameArr();
       this.userCollData = this._collectiondb.getUserCollectionsDataArr();
       
-      console.log(this.userCollName);
-      console.log(this.userCollData);
-      
       this.listSize = this._itemdb.getItemArraySize();
       
+      
+      //a lot of substring is used here to get the specific values from each entry in the item catalog (because each entry is one entire string)
       for(var i = 0;i<this.listSize;i++){
+        
+        var itemname = this.items[i].substring(6, (this.items[i].indexOf('$')-8));
+        
+        var itemTaxes = Number(this.items[i].substring((this.items[i].indexOf('%')-2), (this.items[i].indexOf('%'))));
+      
+        var itemPrices = Number(this.items[i].substring((this.items[i].indexOf('$')+1), (this.items[i].indexOf('%')-8)));
+        
+        var itemQuantities = this.items[i].substring((this.items[i].indexOf('%')+12),(this.items[i].indexOf('#')-1));
+        
+        var itemSales = this.items[i].substring((this.items[i].indexOf('#')+11),this.items[i].length);
+        
+        
+        this.itemTaxDict[itemname] = itemTaxes;
+        //fills the item price dictionary to be used when updating shopping cart quantities
+        this.itemPriceDict[itemname] = itemPrices;
+        //fills the quantity dictionary to be used when updating shopping cart quantities
+        this.itemQuanDict[itemname] = itemQuantities;
          //filling the quantity array with the quantity of each item
-        this.itemQuantityArr[i] = this.items[i].substr((this.items[i].indexOf('%')+12), (this.items[i].indexOf(' ')-2));
+        this.itemQuantityArr[i] = itemQuantities;
         //filling the sales array with the sales of each item
-        this.itemSalesArr[i] = this.items[i].substr((this.items[i].indexOf('#')+11),this.items[i].length);
+        this.itemSalesArr[i] = itemSales;
       }
       
     }, 1000);
+    
+    
     
    
    var num:number = 0;
@@ -94,9 +118,9 @@ export class AuthenticatedpageComponent implements OnInit {
   //when a user clicks on an item to view the description
   viewDesc(item, listIndex: number){
     
-    //Used to get only the name of the item from the string that is in the catalog
-    var nameString = item.substr(6, (item.indexOf('$')-14));
     
+    //Used to get only the name of the item from the string that is in the catalog
+    var nameString = item.substring(6, (item.indexOf('$')-8));
     
     //allows the user to click again to hide the item
     if (this.descFound[listIndex] == true){
@@ -138,7 +162,8 @@ export class AuthenticatedpageComponent implements OnInit {
   addRating (item, comment:string, rating: number){
     
     //gets the itemname from using substring on the list item
-    var itemname = item.substr(6, (item.indexOf('$')-14));
+    
+    var itemname = item.substring(6, (item.indexOf('$')-8));
   
     //forces the user to enter a rating between 1 and 5, and not leave the comment blank
     if (rating < 1 || rating > 5){
@@ -161,16 +186,15 @@ export class AuthenticatedpageComponent implements OnInit {
     this.shoppingIndexArr.push(index);
     
     //gets the name of the item using substring of the whole item string
-    var nameString = item.substr(6, (item.indexOf('$')-14));
+    var nameString = item.substring(6, (item.indexOf('$')-8));
     
-    //gets the current amount in stock using substring and converting to number of the item string (this is a lot faster than accessing the backend)
-    var currentQuan = Number(item.substr((item.indexOf('%')+12), (item.indexOf(' ')-2)));
+    var currentQuan = Number(this.itemQuantityArr[index]);
     
     //getting price
-    var price = Number(item.substr((item.indexOf('$')+1), (item.indexOf(' ')-1)));
+    var price = Number(item.substring((item.indexOf('$')+1), (item.indexOf('%')-8)));
     
     //getting tax
-    var tax = Number(item.substr((item.indexOf('%')-2), (item.indexOf(' ')-3)));
+    var tax = Number(item.substring((item.indexOf('%')-2), (item.indexOf('%'))));
     
     
     //if the quantity is less than 1 or greater than the amount in stock, it asks the user to enter a valid quantity.
@@ -186,7 +210,7 @@ export class AuthenticatedpageComponent implements OnInit {
       priceAfterTax = Math.round(priceAfterTax*100)/100;
       
       //put it into a string entry and push it to the array that holds all the shopping cart items
-      var stringEntry = (nameString + ", Quantity: "+quantity +"; Price: $"+ totalPrice + ", Price after Tax - $" +priceAfterTax);
+      var stringEntry = (nameString + ", Quantity: "+quantity +", Price: $"+ totalPrice + ", Price after Tax - $" +priceAfterTax);
       this.shoppingCart.push(stringEntry);
       
       //store the quantity of each shopping cart item for later use
@@ -204,7 +228,7 @@ export class AuthenticatedpageComponent implements OnInit {
   deletefromCart(shop, index:number){
     
     //getting the price of the item
-    var priceofItem = Number(shop.substr((shop.indexOf('-')+3),shop.length));
+    var priceofItem = Number(shop.substring((shop.indexOf('-')+3),shop.length));
     
     //subtracting it from the subtotal
     this.subtotal = Math.round((this.subtotal - priceofItem)*100)/100;
@@ -218,22 +242,31 @@ export class AuthenticatedpageComponent implements OnInit {
   
   
   clearCart(){
+    
+    if(confirm("Are you sure to you want to clear the cart?")) {
+      this.quantityShopArr = [];
+      this.shoppingCart = [];
+      this.shoppingIndexArr = [];
+      this.subtotal = 0;
+    };
     //empties the arrays needed to manage the shopping cart and resets the subtotal
-    this.quantityShopArr = [];
-    this.shoppingCart = [];
-    this.shoppingIndexArr = [];
-    this.subtotal = 0;
+    
   }
   
   
   
   buy(){
 
+   if(confirm("Are you sure to you want buy these items?")) {
+    
+    var receiptEntry:string = "";
+    
     //for loop the length of how many items are in the shopping cart
     for (var i = 0; i < this.shoppingCart.length; i++){
       //gets the item name and quantity of the individual shopping cart entry
       var stringEntry = this.shoppingCart[i];
-      var itemName = stringEntry.substr(0, (stringEntry.indexOf(',')));
+      var itemName = stringEntry.substring(0, (stringEntry.indexOf(',')));
+      
       var itemQuantity = this.quantityShopArr[i];
     
       //gets the new quantity of the item by subtracting the old quantity stored in an array, with the quantity in the shopping cart
@@ -244,6 +277,14 @@ export class AuthenticatedpageComponent implements OnInit {
       var newSales = Number(this.itemSalesArr[this.shoppingIndexArr[i]]) + Number(itemQuantity);
       var newSalesSt = newSales.toString();
       
+      //adding values to the receipt
+      if (i == 0){
+        receiptEntry = "[" + stringEntry + "] ";
+      }else{
+        receiptEntry = receiptEntry + "[" + stringEntry + "] ";
+      };
+      
+      
       //updates the quantity and sales in the database of the item 
       this._itemdb.updateItemQuantity(itemName,newQuantitySt);
       this._itemdb.updateItemSales(itemName, newSalesSt);
@@ -251,12 +292,8 @@ export class AuthenticatedpageComponent implements OnInit {
       //does this for each item in the shopping cart
     };
     
-    this.shoppingIndexArr = [];
-    this.quantityShopArr = [];
-    this.shoppingCart = [];
-    this.subtotal = 0;
-    
-    alert ("Thank you for Buying! Updated item sales and item quantities.");
+    //shows the user the receipt
+    alert (" Your Receipt: " + receiptEntry + " Subtotal = $" + this.subtotal);
     
     setTimeout(() => {
     
@@ -264,21 +301,30 @@ export class AuthenticatedpageComponent implements OnInit {
     window.location.reload();
     
     }, 2000);
+    
+   };
   }
   
   
   
   addtoCollection(item, index: number, quan: number){
     
-    //gets the name of the item
-    var nameString = item.substr(6, (item.indexOf('$')-14));
+    var currentQuan = Number(this.itemQuantityArr[index]);
+    if (quan < 1 || quan> currentQuan){
+      alert ("Please enter a quantity between 1 and the current amount in stock.");
+    }else{
     
-    //gets the description of the item from the entry
-    var desc = this._itemdb.getDesc(nameString);
-    //creates a string entry
-    var stringEntry = (nameString + ", Description: " +desc+ ", Quantity " +quan );
-    //pushes it to the array that shows the unsaved collection at the bottom of the screen
-    this.unsavedColl.push(stringEntry);
+      //gets the name of the item
+      var nameString = item.substring(6, (item.indexOf('$')-8));
+    
+      //gets the description of the item from the entry
+      var desc = this._itemdb.getDesc(nameString);
+      //creates a string entry
+      var stringEntry = (nameString + ", Description: " +desc+ ", Quantity " +quan );
+      //pushes it to the array that shows the unsaved collection at the bottom of the screen
+      this.unsavedColl.push(stringEntry);
+    
+    }
   }
   
   
@@ -324,12 +370,72 @@ export class AuthenticatedpageComponent implements OnInit {
     this._collectiondb.saveCollection(this.loggedinAcc, collectionName, isPublic, stringEntry);
     
     this.unsavedColl = [];
-    
-    
+    window.location.reload();
+      
     };
     
   }
   
+  renameCollection(newname: string, name){
+    
+    var prevname = name.substring((name.indexOf(':')+2), (name.indexOf(',')));
+    console.log (prevname);
+
+    this._collectiondb.updateCollName(prevname,newname);
+    
+    window.location.reload();
+    
+  }
+  
+  
+  deleteCollection(name){
+    var prevname = name.substring((name.indexOf(':')+2), (name.indexOf(',')));
+    this._collectiondb.deleteCollection(prevname);
+    
+    window.location.reload();
+  }
+  
+  
+  updateCartQuantity(shop, quantity: number, index:number){
+    
+    var itemName = shop.substring(0, (shop.indexOf(',')));
+    
+    var amountInStock =   Number(this.itemQuanDict[itemName]);
+
+    
+    if (quantity < 1){
+      alert ("Please enter a quantity greater than 1");
+    }else if(quantity>amountInStock){
+      alert ("Please enter a quantity less than the amount in stock");
+    }else{
+      
+      var firstHalf = shop.slice(0,shop.indexOf(':')+1);
+      
+      var price = this.itemPriceDict[itemName];
+      
+      var totalPrice = price * quantity;
+      totalPrice = Math.round(totalPrice*100)/100;
+      
+      var tax = this.itemTaxDict[itemName];
+      
+      var newPriceAfterTax: number = (totalPrice + (totalPrice * tax/100));
+      newPriceAfterTax = Math.round(newPriceAfterTax*100)/100;
+      
+      var oldPriceAfterTax = Number(shop.substring(shop.indexOf("-")+3,shop.length));
+      
+      var difference = newPriceAfterTax - oldPriceAfterTax;
+      
+      var stringEntry = firstHalf + " " + quantity + ", Price: $" +totalPrice+ ", Price after Tax - $" +newPriceAfterTax;
+      
+      
+      this.quantityShopArr[index] = quantity.toString();
+      this.shoppingCart[index] = stringEntry;
+      
+      this.subtotal = this.subtotal + difference;
+      this.subtotal = Math.round(this.subtotal*100)/100;
+    }
+    
+  }
   
   //When the user clicks log out
   backToHome() {

@@ -44,7 +44,7 @@ export class UnauthenticatedpageComponent implements OnInit {
   viewDesc(item, listIndex: number){
     
     //Used to get only the name of the item from the string
-    var nameString = item.substr(6, (item.indexOf('$')-14));
+    var nameString = item.substring(6, (item.indexOf('$')-8));
     
     
     

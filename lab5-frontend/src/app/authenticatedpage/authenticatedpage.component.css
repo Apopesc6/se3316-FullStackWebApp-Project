@@ -12,7 +12,6 @@
 }
 
 .shopList{
-   margin: 15px 0;
    border: 2px solid blue;
    width: 450px;
 }
@@ -36,6 +35,19 @@
 .savedColl{
   width:600px;
   
+}
+
+.shopBtns{
+  margin-bottom: 25px;
+}
+
+#cartQuan{
+  margin-left: 139px;
+  width: 80px;
+}
+
+#rename{
+  margin-right: 310px;
 }
 
 #collectionTitle{

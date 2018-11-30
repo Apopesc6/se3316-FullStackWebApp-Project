@@ -26,9 +26,9 @@ expressRouter.post('/createItem', (req, res) =>{
 });
 
 //For deleting the items
-expressRouter.delete('/deleteItem', (req, res) => {
+expressRouter.delete('/deleteItem/:delete_name', (req, res) => {
 
-    var itemName = req.body.itemName;
+    var itemName = req.params.delete_name;
    
    //Find item by its name 
    ItemSchema.findOne({itemName})

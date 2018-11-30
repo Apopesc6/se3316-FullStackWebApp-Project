@@ -47,17 +47,21 @@
             <div class = "shopList">
                 {{shop}} 
             </div>
-            <button (click) = "deletefromCart(shop,i)"> Delete From Cart </button>
+            <div class = "shopBtns">
+                <button (click) = "deletefromCart(shop,i)"> Delete From Cart </button>
+                <input id="cartQuan" #newQuan type="number" placeholder= "Quantity">
+                <button (click) = "updateCartQuantity(shop, newQuan.value, i)"> Update Quantity </button>
+            </div>
         </li>
     </ul>
 
     <br><span id="subtotal"> Subtotal: ${{subtotal}}</span><br><br>
     <button id = "clear"(click) = "clearCart()"> Clear Cart </button>
     <button (click) = "buy()"> Buy Items</button>
-</div>
+</div><br>
 
 
-<br><h1>Item Collections</h1>
+<br><br><br><h1>Item Collections</h1>
 
 <div class = "addtoColl">
     <h2>Add to Collections: </h2>
@@ -84,7 +88,10 @@
     <li *ngFor="let name of userCollName; let t = index">
         <div class = "savedColl">
             <div id = "collectionTitle">
-                {{name}}
+                {{name}}<br>
+                <input #rename type="text" placeholder= "New Name">
+                <button id = "rename" (click) = "renameCollection(rename.value, name)"> Rename </button>
+                <button (click) = "deleteCollection(name)"> Delete </button>
             </div>
              
          <br>
@@ -103,12 +110,14 @@
     <li *ngFor="let title of pubCollName; let g = index">
         <div class = "savedColl">
             <div id = "collectionTitle">
-                {{title}}
+                {{title}} 
             </div>
              
          <br>
              <div id = "collectionData">
                  {{pubCollData[g]}}
+                 
+                 
              </div>
         </div>
     </li>

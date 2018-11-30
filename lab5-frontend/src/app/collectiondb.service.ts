@@ -58,9 +58,9 @@ export class CollectiondbService {
             if (this.collUser == username){ //if the item name is the same as the one passed in, it adds to an array
               
               if (this.collPublic == true){
-                var stringEntry = ("User: " + this.collUser + ", Collection Name: " + this.collName +", Public Collection");
+                var stringEntry = ("Collection Name: " + this.collName +", Public Collection");
               }else{
-                var stringEntry = ("User: " + this.collUser + ", Collection Name: " + this.collName +", Private Collection");
+                var stringEntry = ("Collection Name: " + this.collName +", Private Collection");
               };
                 
               var dataEntry = this.collData;
@@ -129,6 +129,38 @@ export class CollectiondbService {
     return this.pubCollDataArr;
   }
   
+  
+  
+  updateCollName(oldname:string, newname:string){
+    
+    this.httpClient.post(`api/CollectionDatabase/updateCollName`, {
+      //using the values passed in
+      oldName: oldname,
+      newName: newname
+      
+    })
+    .subscribe(
+      (data:any) => {
+        //console.log(data);
+          console.log(data);
+      }
+      )
+    
+  }
+  
+  
+  deleteCollection(name: string){
+    
+    
+    this.httpClient.delete(`api/CollectionDatabase/deleteCollection/${name}`)
+      .subscribe(
+      (data:any[]) => {
+        //console.log(data);
+          console.log(data);
+      }
+      )
+    
+  }
   
   
 }
