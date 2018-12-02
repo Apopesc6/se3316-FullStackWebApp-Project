@@ -10,8 +10,11 @@ export class AuthService {
   private successfulLogIn: boolean = false;
   private usernameAcc: string;
   private passwordAcc: string;
+  private adminAcc: string;
   private activeAcc: boolean = false;
+  private isManager: boolean = false;
   private users: string[] = [];
+  private managerArr:string[] = [];
   
 
   constructor(private httpClient: HttpClient) { }
@@ -75,6 +78,43 @@ export class AuthService {
   }
   
   
+  getManager(username: string){
+    
+    this.httpClient.get(`api/ManagerDatabase/${username}`)
+    .subscribe(
+      (data:any) => {
+          console.log(JSON.stringify(data));
+          this.adminAcc = data.userName;
+          
+
+          this.isManager = true;
+          
+      }
+      )
+    
+  }
+  
+  
+  getAllManagers(){
+    this.httpClient.get(`api/ManagerDatabase/allManagers`)
+    .subscribe(
+      (data:any) => {
+        var database = JSON.parse(JSON.stringify(data));
+        
+        database.forEach(managerinDatabase =>{
+           var user = managerinDatabase.userName;
+          
+           var stringEntry = ("Username: " + user);
+          
+           this.managerArr.push(stringEntry);
+          
+         });
+        
+      }
+      )
+  }
+  
+  
   getUsers(){
     this.httpClient.get(`api/LoginDatabase/allUsers`)
     .subscribe(
@@ -95,6 +135,10 @@ export class AuthService {
       )
   } 
   
+  
+  
+  
+  
   updateActive(name: string, active: boolean){
     this.httpClient.post(`api/LoginDatabase/updateActive`, {
       //using the values passed in
@@ -111,12 +155,19 @@ export class AuthService {
     
   }
   
+  getManagerArr(): string[]{
+    return this.managerArr;
+  }
   
   getUsersArr(): string[]{
     return this.users;
   }
   
-
+  
+  getisManager(): boolean{
+    return this.isManager;
+  }
+  
   getSuccessfulLogin(): boolean{
       return this.successfulLogIn;
   }

@@ -56,7 +56,7 @@
     </li>
 </ul>
 
-<br><h1>Other Users</h1>
+<br><h1>All Users</h1>
 <ul>
     <li *ngFor="let user of userArr; let t = index">
         
@@ -68,3 +68,15 @@
 
     </li>
 </ul>
+
+
+
+<br><h1>Managers</h1>
+<ul>
+    <li *ngFor="let manager of managerArr">
+        
+        <div class ="managerList">
+            {{manager}}
+        </div>
+
+    </li>

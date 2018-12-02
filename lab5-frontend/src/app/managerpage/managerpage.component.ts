@@ -20,6 +20,7 @@ export class ManagerpageComponent implements OnInit {
   itemDescription: string[] = [];
   descFound: boolean[] = [];
   userArr: string[] = [];
+  managerArr: string[] = [];
   itemIndex: number;
   listSize:number;
 
@@ -30,9 +31,16 @@ export class ManagerpageComponent implements OnInit {
     
     this._auth.getUsers();
     
+    this._auth.getAllManagers();
+    
     this.items = this._itemdb.getItems();
     
     setTimeout(() => {
+      
+      this.managerArr = this._auth.getManagerArr();
+      
+      console.log(this.managerArr);
+      
       this.listSize = this._itemdb.getItemArraySize();
       
       this.userArr = this._auth.getUsersArr();
@@ -184,6 +192,10 @@ export class ManagerpageComponent implements OnInit {
     
     this._auth.updateActive(username, setActive);
     
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+    
   }
   
   
@@ -191,6 +203,12 @@ export class ManagerpageComponent implements OnInit {
     var username = user.substring(10, user.indexOf(','));
     this._auth.addManager(username);
     
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+    
   }
+  
+
   
 }

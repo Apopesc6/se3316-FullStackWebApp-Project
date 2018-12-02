@@ -18,4 +18,23 @@ expressRouter.post('/createAdmin', (req, res) =>{
     });
 });
 
+
+expressRouter.get('/allManagers', (req, res) => {
+    ManagerSchema.find().then(users => res.json(users)).catch(err => res.status(404));
+});
+
+
+//For finding an individual item
+expressRouter.get('/:admin_name', (req,res) => {
+    
+   var userName = req.params.admin_name;
+   
+    //Find item by its name 
+   ManagerSchema.findOne({userName}).then(manager => res.json(manager)).catch(err => res.status(404).json({usernotfound: 'Not user found'}));
+   
+});
+
+
+
+
 module.exports = expressRouter;

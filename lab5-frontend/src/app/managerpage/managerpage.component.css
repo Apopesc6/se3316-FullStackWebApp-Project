@@ -10,6 +10,12 @@
   border: 2px solid blue;
 }
 
+.managerList{
+  margin: 25px 0;
+  width: 400px;
+  border: 2px solid red;
+}
+
 .edit{
   margin-top:-127px;
   margin-left: 110px;
