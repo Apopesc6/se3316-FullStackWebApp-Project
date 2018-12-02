@@ -7,6 +7,7 @@ var items = require('./ItemDatabase');
 var users = require('./LoginDatabase');
 var ratings = require('./RatingDatabase');
 var collections = require('./CollectionDatabase');
+var managers = require('./ManagerDatabase');
 var expressApp = express();
 
 //Using mongoose to connect to mongoDB
@@ -33,7 +34,7 @@ expressApp.use('/api/ItemDatabase', items);
 expressApp.use('/api/LoginDatabase', users);
 expressApp.use('/api/RatingDatabase', ratings);
 expressApp.use('/api/CollectionDatabase', collections);
-
+expressApp.use('/api/ManagerDatabase', managers);
 
 //Starts listnening
 expressApp.listen(8081);

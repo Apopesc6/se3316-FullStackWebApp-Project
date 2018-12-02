@@ -4,17 +4,19 @@
 
 <h1>Item Catalog</h1>
 
-<h3>Add an Item to the Catalog:</h3>
-Name: <br><input #itemname type = "text" placeholder = "Item Name"><br>
-Quantity: <br><input #itemquan type = "text" placeholder = "Item Quantity"><br>
-Price: <br><input #itemprice type = "text" placeholder = "Item Price"><br>
-Tax: <br><input #itemtax type = "text" placeholder = "Item Tax"><br>
-Description: <br><input #itemdesc type = "text" placeholder = "Item Description"><br>
-Purchases: <br><input #itempurch type = "text" placeholder = "Item Purchases"><br>
+<div class = "addItem">
+    <h3>Add an Item to the Catalog:</h3>
+    Name: <br><input #itemname type = "text" placeholder = "Item Name"><br>
+    Quantity: <br><input #itemquan type = "text" placeholder = "Item Quantity"><br>
+    Price: <br><input #itemprice type = "text" placeholder = "Item Price"><br>
+    Tax: <br><input #itemtax type = "text" placeholder = "Item Tax"><br>
+    Description: <br><input #itemdesc type = "text" placeholder = "Item Description"><br>
+    Purchases: <br><input #itempurch type = "text" placeholder = "Item Purchases"><br>
+</div>
 
 <br><button (click) = "addItem(itemname.value, itemquan.value, itemprice.value, itemtax.value, itemdesc.value, itempurch.value)">Add Item</button><br>
 
-<h3>Catalog: </h3>
+<br><h3>Catalog: </h3>
 
 <ul>
     <li *ngFor="let item of items; let j = index">
@@ -22,6 +24,22 @@ Purchases: <br><input #itempurch type = "text" placeholder = "Item Purchases"><b
         <div class ="list" (click)="viewDesc(item,j)">
             {{item}}
         </div>
+        
+        
+        <div class = "edit">
+                <input #editN type = "text" placeholder = "Edit Name">
+                <button class = "updatebtn" (click) = "editName(item, editN.value)">Update Name</button> <br>
+                <input #editD type = "text" placeholder = "Edit Description">
+                <button class = "updatebtn" (click) = "editDesc(item, editD.value)">Update Description</button> <br>
+                <input #editP type = "text" placeholder = "Edit Price">
+                <button class = "updatebtn" (click) = "editPrice(item, editP.value)">Update Price</button> <br>
+                <input #editT type = "text" placeholder = "Edit Tax">
+                <button class = "updatebtn" (click) = "editTax(item, editT.value)">Update Tax</button> <br>
+                <input #editQ type = "text" placeholder = "Edit Quantity">
+                <button class = "updatebtn" (click) = "editQuantity(item, editQ.value)">Update Quantity</button> <br>
+        </div>
+        
+        <br><button id = "delete" (click) = "deleteItem(item)">Delete</button> <br>
         
         
         <div *ngIf = "descFound[j]==true">
@@ -38,4 +56,15 @@ Purchases: <br><input #itempurch type = "text" placeholder = "Item Purchases"><b
     </li>
 </ul>
 
-<h1>Other Users</h1><br>
+<br><h1>Other Users</h1>
+<ul>
+    <li *ngFor="let user of userArr; let t = index">
+        
+        <div class ="userList">
+            {{user}}
+            <br> <button (click) = "inactiveUser(user)"> Mark as Active/Inactive </button>
+            <button id = "admin" (click) = "adminUser(user)"> Make Manager</button>
+        </div>
+
+    </li>
+</ul>

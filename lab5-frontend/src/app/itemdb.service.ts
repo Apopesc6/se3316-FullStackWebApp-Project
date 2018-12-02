@@ -87,6 +87,7 @@ export class ItemdbService {
     
   }
    
+  
    
   //used by the manager to add items to the catalog
   addItem(name:string, quantity:string, price:string, tax:string, description:string, purchases:string){
@@ -140,7 +141,76 @@ export class ItemdbService {
       )
     
   }
+  
+  
+  updateItemTax(name: string, tax: string){
+    this.httpClient.post(`api/ItemDatabase/updateItemTax`, {
+      //using the values passed in
+      itemName: name,
+      itemTax: tax
+      
+    })
+    .subscribe(
+      (data:any) => {
+        //console.log(data);
+          console.log(data);
+      }
+      )
     
+  }
+    
+  
+  updateItemPrice(name: string, price: string){
+    
+    
+    this.httpClient.post(`api/ItemDatabase/updateItemPrice`, {
+      //using the values passed in
+      itemName: name,
+      itemPrice: price
+      
+    })
+    .subscribe(
+      (data:any) => {
+        //console.log(data);
+          console.log(data);
+      }
+      )
+    
+  }
+  
+  updateItemDesc(name: string, desc: string){
+    
+    this.httpClient.post(`api/ItemDatabase/updateItemDesc`, {
+      //using the values passed in
+      itemName: name,
+      itemDesc: desc
+      
+    })
+    .subscribe(
+      (data:any) => {
+        //console.log(data);
+          console.log(data);
+      }
+      )
+    
+  }
+  
+  updateItemName(oldname: string, newname: string){
+    
+    this.httpClient.post(`api/ItemDatabase/updateItemName`, {
+      //using the values passed in
+      newName: newname,
+      oldName: oldname
+      
+    })
+    .subscribe(
+      (data:any) => {
+        //console.log(data);
+          console.log(data);
+      }
+      )
+    
+  }
   
   
   updateItemSales(name: string, sales: string){
@@ -158,7 +228,15 @@ export class ItemdbService {
       )
   }
   
-  
+  deleteItem(name:string){
+    this.httpClient.delete(`api/ItemDatabase/deleteItem/${name}`)
+      .subscribe(
+      (data:any[]) => {
+        //console.log(data);
+          console.log(data);
+      }
+      )
+  }
   
 }
 

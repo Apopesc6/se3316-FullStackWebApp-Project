@@ -11,6 +11,7 @@ export class AuthService {
   private usernameAcc: string;
   private passwordAcc: string;
   private activeAcc: boolean = false;
+  private users: string[] = [];
   
 
   constructor(private httpClient: HttpClient) { }
@@ -18,9 +19,7 @@ export class AuthService {
   
   //Used with the signup page to add a new user to the user account database
   addUserDetails(username: string, password: string){
-    
-    console.log (username + " " +password);
-    
+
     this.httpClient.post(`api/LoginDatabase/createUser`, {
       //using the values passed in
       userName: username,
@@ -33,6 +32,23 @@ export class AuthService {
           console.log(data);
       }
       )
+  }
+  
+  
+  
+  addManager(username:string){
+    
+    this.httpClient.post(`api/ManagerDatabase/createAdmin`, {
+      //using the values passed in
+      userName: username
+      
+    })
+    .subscribe(
+      (data:any[]) => {
+          console.log(data);
+      }
+      )
+    
   }
   
   
@@ -58,6 +74,47 @@ export class AuthService {
 
   }
   
+  
+  getUsers(){
+    this.httpClient.get(`api/LoginDatabase/allUsers`)
+    .subscribe(
+      (data:any) => {
+        var database = JSON.parse(JSON.stringify(data));
+        
+        database.forEach(userinDatabase =>{
+          var user = userinDatabase.userName;
+          var isActive = userinDatabase.isActive;
+          
+          var stringEntry = ("Username: " + user + ", Active: " +isActive);
+          
+          this.users.push(stringEntry);
+          
+        });
+        
+      }
+      )
+  } 
+  
+  updateActive(name: string, active: boolean){
+    this.httpClient.post(`api/LoginDatabase/updateActive`, {
+      //using the values passed in
+      userName: name,
+      isActive: active
+      
+    })
+    .subscribe(
+      (data:any) => {
+        //console.log(data);
+          console.log(data);
+      }
+      )
+    
+  }
+  
+  
+  getUsersArr(): string[]{
+    return this.users;
+  }
   
 
   getSuccessfulLogin(): boolean{

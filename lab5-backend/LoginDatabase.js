@@ -21,6 +21,11 @@ expressRouter.post('/createUser', (req, res) =>{
     });
 });
 
+//For finding all of the items
+expressRouter.get('/allUsers', (req, res) => {
+    LoginSchema.find().then(users => res.json(users)).catch(err => res.status(404));
+});
+
 //For finding an individual item
 expressRouter.get('/:user_name', (req,res) => {
     
@@ -29,6 +34,20 @@ expressRouter.get('/:user_name', (req,res) => {
     //Find item by its name 
    LoginSchema.findOne({userName}).then(user => res.json(user)).catch(err => res.status(404).json({usernotfound: 'Not user found'}));
    
+});
+
+//For updating the quantity
+expressRouter.post('/updateActive' , (req,res) =>{
+   
+   var userName = req.body.userName;
+   //Find item by its name 
+   LoginSchema.findOne({userName})
+   .then(user => {
+       //If the item is in the database, then it is able to be altered
+       if(user){
+           user.updateOne({isActive: req.body.isActive}).then(user => res.json(user));
+       }
+   });
 });
 
 module.exports = expressRouter;

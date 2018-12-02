@@ -28,10 +28,10 @@ expressRouter.post('/createItem', (req, res) =>{
 //For deleting the items
 expressRouter.delete('/deleteItem/:delete_name', (req, res) => {
 
-    var itemName = req.params.delete_name;
+    var deletename = req.params.delete_name;
    
    //Find item by its name 
-   ItemSchema.findOne({itemName})
+   ItemSchema.findOne({itemName:deletename})
    .then(item => {
        //If the item is in the database, then it is able to be removed
        if(item){
@@ -55,6 +55,55 @@ expressRouter.post('/updateItemTax' , (req,res) =>{
        }
    });
 });
+
+
+//For updating the items
+expressRouter.post('/updateItemPrice' , (req,res) =>{
+   
+   var itemName = req.body.itemName;
+   
+   //Find item by its name
+   ItemSchema.findOne({itemName})
+   .then(item => {
+       //If the item is in the database, then it is able to be altered
+       if(item){
+           item.updateOne({itemPrice: req.body.itemPrice}).then(item => res.json(item));
+       }
+   });
+});
+
+//For updating the items
+expressRouter.post('/updateItemDesc' , (req,res) =>{
+   
+   var itemName = req.body.itemName;
+   
+   //Find item by its name
+   ItemSchema.findOne({itemName})
+   .then(item => {
+       //If the item is in the database, then it is able to be altered
+       if(item){
+           item.updateOne({itemDesc: req.body.itemDesc}).then(item => res.json(item));
+       }
+   });
+});
+
+
+//For updating the items
+expressRouter.post('/updateItemName' , (req,res) =>{
+   
+   var oldName = req.body.oldName;
+   var newName = req.body.newName;
+   
+   //Find item by its name
+   ItemSchema.findOne({itemName: oldName})
+   .then(item => {
+       //If the item is in the database, then it is able to be altered
+       if(item){
+           item.updateOne({itemName: newName}).then(item => res.json(item));
+       }
+   });
+});
+
 
 //For updating the quantity
 expressRouter.post('/updateItemQuantity' , (req,res) =>{
