@@ -15,6 +15,29 @@
   <a routerLink="/signup">Sign up</a><br>
   <a routerLink="/login">Log in as User</a><br>
   <a routerLink="/admin">Log in as Manager</a><br>
-  <a routerLink="/unAuth">Proceed Without an Account</a>
-
+  <a routerLink="/unAuth">View Catalog</a>
+  
 </div>
+
+<h3>Popular Items: </h3>
+  <ul>
+    <li *ngFor="let item of topten; let j = index">
+        
+        <div class ="list" (click)="viewDesc(item,j)">
+            {{item}}
+        </div>
+        
+        
+        <div *ngIf = "descFound[j]==true">
+            <div id = "descContainer">
+                <strong>Description: </strong><br>
+                <span>{{itemDescription[j]}}</span><br><br>
+                <div id = "Ratings">
+                    <strong>Ratings: </strong><br>
+                    <span> {{ratingArr[j]}}</span> 
+                </div>
+            </div>
+        </div>
+        
+    </li>
+  </ul>

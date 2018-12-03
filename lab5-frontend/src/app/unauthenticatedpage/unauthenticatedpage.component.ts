@@ -61,6 +61,7 @@ export class UnauthenticatedpageComponent implements OnInit {
       //creates a temporary string entry variable  
       var stringEntry:string="";
       //adds each entry in the array to a single string
+      if(this.ratings.length < 5){
         for(var i=0;i<this.ratings.length;i++){
           if (i == 0){
             stringEntry = (this.ratings[i]);
@@ -68,6 +69,15 @@ export class UnauthenticatedpageComponent implements OnInit {
             stringEntry = (stringEntry+" "+this.ratings[i]);
           };
         };
+      }else{
+        for(var i=0;i<5;i++){
+          if (i == 0){
+            stringEntry = (this.ratings[i]);
+          }else{
+            stringEntry = (stringEntry+" "+this.ratings[i]);
+          };
+        };
+      };
         //adds the ratings to the array of the to show next to the appropriate item
         this.ratingArr[listIndex] = stringEntry;
       }, 1000);

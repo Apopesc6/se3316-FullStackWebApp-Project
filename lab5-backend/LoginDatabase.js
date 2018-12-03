@@ -17,6 +17,8 @@ expressRouter.post('/createUser', (req, res) =>{
             });
             //saves the item in the database
             addedUser.save().then(user => res.json(user)).catch(error => console.log(error));
+        }else{
+            return res.json({userName: 'Item already exists'});
         }
     });
 });

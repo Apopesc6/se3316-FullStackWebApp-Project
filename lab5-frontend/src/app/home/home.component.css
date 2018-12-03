@@ -2,3 +2,18 @@
   border:1px solid black;
   width:400px;
 }
+
+.list{
+  margin: 15px 0;
+  width: 100px;
+  border: 2px solid blue;
+}
+
+#Ratings{
+  width:200px;
+}
+
+#descContainer{
+  border: 2px solid red;
+  width:220px;
+}

@@ -21,8 +21,6 @@ export class AdminComponent implements OnInit {
   
   loginAdmin(username:string, password: string) {
     
-    
-    
     if(username == "store manager" && password == "manager"){
       alert ("Successful login, routing to manager page.");
       this._router.navigateByUrl('/manager');

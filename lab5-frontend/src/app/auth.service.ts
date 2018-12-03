@@ -16,6 +16,7 @@ export class AuthService {
   private users: string[] = [];
   private managerArr:string[] = [];
   
+  private accExists: boolean = false;
 
   constructor(private httpClient: HttpClient) { }
   
@@ -33,10 +34,27 @@ export class AuthService {
     .subscribe(
       (data:any[]) => {
           console.log(data);
+          
+          var result = JSON.stringify(data);
+          
+          var resultstr = result.substring(result.indexOf(':')+2, result.length-2);
+          
+          console.log (resultstr);
+          
+          if (resultstr == "Item already exists"){
+            this.accExists = true;
+          }else{
+            this.accExists = false;
+          }
       }
       )
   }
   
+  
+  
+  getAccExists(): boolean{
+    return this.accExists;
+  }
   
   
   addManager(username:string){
