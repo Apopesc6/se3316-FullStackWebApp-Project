@@ -12,6 +12,7 @@ expressRouter.post('/createCollection', (req, res) =>{
             var addedCollection = new CollectionSchema({
                 userName: req.body.userName,
                 collectionName: req.body.collectionName,
+                collectionDesc: req.body.collectionDesc,
                 collectionData: req.body.collectionData,
                 isPublic: req.body.isPublic
             });
@@ -33,6 +34,38 @@ expressRouter.post('/updateCollName' , (req,res) =>{
        //If the item is in the database, then it is able to be altered
        if(collection){
            collection.updateOne({collectionName: newName}).then(collection => res.json(collection));
+       }
+   });
+});
+
+
+expressRouter.post('/updateCollDesc' , (req,res) =>{
+   
+   var Name = req.body.collName;
+   var newDesc = req.body.collDesc;
+   
+   //Find item by its name 
+   CollectionSchema.findOne({collectionName: Name})
+   .then(collection => {
+       //If the item is in the database, then it is able to be altered
+       if(collection){
+           collection.updateOne({collectionDesc: newDesc}).then(collection => res.json(collection));
+       }
+   });
+});
+
+
+expressRouter.post('/updateCollPub' , (req,res) =>{
+   
+   var Name = req.body.collName;
+   var newPub = req.body.collPub;
+   
+   //Find item by its name 
+   CollectionSchema.findOne({collectionName: Name})
+   .then(collection => {
+       //If the item is in the database, then it is able to be altered
+       if(collection){
+           collection.updateOne({isPublic: newPub}).then(collection => res.json(collection));
        }
    });
 });

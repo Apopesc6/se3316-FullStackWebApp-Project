@@ -39,8 +39,6 @@ export class ManagerpageComponent implements OnInit {
       
       this.managerArr = this._auth.getManagerArr();
       
-      console.log(this.managerArr);
-      
       this.listSize = this._itemdb.getItemArraySize();
       
       this.userArr = this._auth.getUsersArr();
@@ -209,6 +207,10 @@ export class ManagerpageComponent implements OnInit {
     
   }
   
-
+  
+  toSecurity(){
+    this._router.navigateByUrl('/security');
+  }
+  
   
 }

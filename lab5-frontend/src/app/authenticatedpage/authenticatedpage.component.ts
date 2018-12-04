@@ -22,11 +22,16 @@ export class AuthenticatedpageComponent implements OnInit {
   
   userCollName: string[] = [];
   userCollData: string[] = [];
+  userCollDesc: string[] = [];
   
   pubCollName: string[] = [];
   pubCollData: string[] = [];
+  pubCollDesc: string[] = [];
   
   unsavedColl: string[] = [];
+  
+  pubCollShowed: boolean[] = [];
+  userCollShowed:boolean[] = [];
   
   itemQuantityArr:string[] =[];
   itemSalesArr:string[] = [];
@@ -69,11 +74,29 @@ export class AuthenticatedpageComponent implements OnInit {
       
       this.pubCollName = this._collectiondb.getPubCollectionsNameArr();
       this.pubCollData = this._collectiondb.getPubCollectionsDataArr();
+      this.pubCollDesc = this._collectiondb.getPubCollectionsDescArr();
       
       this.userCollName = this._collectiondb.getUserCollectionsNameArr();
       this.userCollData = this._collectiondb.getUserCollectionsDataArr();
+      this.userCollDesc = this._collectiondb.getUserCollectionsDescArr();
       
       this.listSize = this._itemdb.getItemArraySize();
+      
+      
+      
+      for(var num=0;num<this.listSize;num++) {
+        //fills the boolean array with false initially to hide all descriptions 
+        this.descFound[num]=false;
+      }
+      
+      
+      for(var i = 0; i<this.userCollName.length;i++){
+        this.userCollShowed[i] = false;
+      }
+      
+      for (var i = 0; i<this.pubCollName.length;i++){
+        this.pubCollShowed[i] = false;
+      }
       
       
       //a lot of substring is used here to get the specific values from each entry in the item catalog (because each entry is one entire string)
@@ -102,22 +125,14 @@ export class AuthenticatedpageComponent implements OnInit {
       }
       
     }, 1000);
-    
-    
-    
-   
-   var num:number = 0;
-    for(num=0;num<=this.listSize;num++) {
-      //fills the boolean array with false initially to hide all descriptions 
-      this.descFound[num]=false;
-    }
+  
+
   }
   
   
   
   //when a user clicks on an item to view the description
   viewDesc(item, listIndex: number){
-    
     
     //Used to get only the name of the item from the string that is in the catalog
     var nameString = item.substring(6, (item.indexOf('$')-8));
@@ -158,6 +173,31 @@ export class AuthenticatedpageComponent implements OnInit {
   
   
   
+  viewUserCollDesc (index:number){
+    
+    if (this.userCollShowed[index] == true){
+      //hides the value when clicked again
+      this.userCollShowed[index] = false;
+    }else{
+      //sets descFound to true, so when the user clicks it again, hides the value
+      this.userCollShowed[index] = true;
+    };
+    
+  }
+  
+  
+  viewPubCollDesc(index:number){
+    
+    if (this.pubCollShowed[index] == true){
+      //hides the value when clicked again
+      this.pubCollShowed[index] = false;
+    }else{
+      //sets descFound to true, so when the user clicks it again, hides the value
+      this.pubCollShowed[index] = true;
+    };
+  }
+  
+  
   //When the user clicks the add rating button
   addRating (item, comment:string, rating: number){
     
@@ -172,8 +212,10 @@ export class AuthenticatedpageComponent implements OnInit {
       alert ("Please enter a value for comment");
     }else{
       //uses addRating from the service to add the rating to the database
-      this._ratingdb.addRating(this.loggedinAcc, itemname, comment, rating);
-      alert ("Added rating successfully");
+      if(confirm("Are you sure to you add this comment?")) {
+        this._ratingdb.addRating(this.loggedinAcc, itemname, comment, rating);
+        alert ("Added rating successfully");
+      };
     };
     
   }
@@ -320,7 +362,7 @@ export class AuthenticatedpageComponent implements OnInit {
       //gets the description of the item from the entry
       var desc = this._itemdb.getDesc(nameString);
       //creates a string entry
-      var stringEntry = (nameString + ", Description: " +desc+ ", Quantity " +quan );
+      var stringEntry = (nameString +", Quantity " +quan );
       //pushes it to the array that shows the unsaved collection at the bottom of the screen
       this.unsavedColl.push(stringEntry);
     
@@ -334,7 +376,7 @@ export class AuthenticatedpageComponent implements OnInit {
   }
   
   
-  saveCollection(collectionName: string, isPubStr:string){
+  saveCollection(collectionName: string, collectionDesc:string, isPubStr:string){
     
     var isPublic: boolean = false;
     
@@ -367,7 +409,7 @@ export class AuthenticatedpageComponent implements OnInit {
       };
     
     //calls the function in the service that stores the collection in the database  
-    this._collectiondb.saveCollection(this.loggedinAcc, collectionName, isPublic, stringEntry);
+    this._collectiondb.saveCollection(this.loggedinAcc, collectionName, collectionDesc, isPublic, stringEntry);
     
     this.unsavedColl = [];
     window.location.reload();
@@ -379,12 +421,39 @@ export class AuthenticatedpageComponent implements OnInit {
   renameCollection(newname: string, name){
     
     var prevname = name.substring((name.indexOf(':')+2), (name.indexOf(',')));
-    console.log (prevname);
 
     this._collectiondb.updateCollName(prevname,newname);
     
     window.location.reload();
     
+  }
+  
+  
+  newDesc(newdesc: string, name){
+    
+    console.log ("test")
+    
+    var prevname = name.substring((name.indexOf(':')+2), (name.indexOf(',')));
+    this._collectiondb.updateCollDesc(prevname, newdesc);
+    
+    window.location.reload();
+  }
+  
+  
+  
+  toggleP(name){
+    var prevname = name.substring((name.indexOf(':')+2), (name.indexOf(',')));
+    var isPub = name.substring((name.indexOf(',')+2), (name.length -11));
+    
+    if (isPub == "Private"){
+      var newPub = true;
+    }else if (isPub == "Public"){
+      var newPub = false;
+    };
+    
+    this._collectiondb.updateCollPublic(prevname,newPub);
+    
+    window.location.reload();
   }
   
   
@@ -435,6 +504,10 @@ export class AuthenticatedpageComponent implements OnInit {
       this.subtotal = Math.round(this.subtotal*100)/100;
     }
     
+  }
+  
+  toCopyright(){
+    this._router.navigateByUrl('/authpolicy/'+this.loggedinAcc);
   }
   
   //When the user clicks log out

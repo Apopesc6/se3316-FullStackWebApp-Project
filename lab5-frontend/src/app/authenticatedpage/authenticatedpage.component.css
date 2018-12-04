@@ -34,16 +34,21 @@
 
 .savedColl{
   width:600px;
-  
+  margin: 25px 0;
 }
 
 .shopBtns{
   margin-bottom: 25px;
 }
 
+
 #cartQuan{
   margin-left: 139px;
   width: 80px;
+}
+
+#input{
+  width: 131px;
 }
 
 #rename{
@@ -55,10 +60,19 @@
   border: 2px solid red;
 }
 
+#collectionDesc{
+  width: 600px;
+  border: 1px solid black;
+  margin-top: 5px;
+}
+
+#newDescBtn{
+  margin-right:157px;
+}
+
 #collectionData{
   width: 600px;
-  border: 2px solid black;
-  margin-bottom: 55px;
+  border: 1px solid black;
 }
 
 #ratingnum{

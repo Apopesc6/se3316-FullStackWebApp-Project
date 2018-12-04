@@ -2,6 +2,8 @@
 <button (click)="backToHome()"> Log Out </button>
 <br>
 
+
+
 <h1>Item Catalog</h1>
 
 <ul>
@@ -65,7 +67,10 @@
 
 <div class = "addtoColl">
     <h2>Add to Collections: </h2>
-    Name Collection: <input #collName type = "text" placeholder = "Collection Name"> <br> <br>
+
+    Name Collection: <input id = "input" #collName type = "text" placeholder = "Collection Name"> <br> 
+    Description: <input #Desc type = "text" placeholder = "Description"> <br> <br>
+   
     
     <ul>
         <li *ngFor="let unsaved of unsavedColl; let f = index">
@@ -76,8 +81,9 @@
         </li>
     </ul>
     
-    <br> Is this collection public? <input #isPublic type = "text" id = "isPublic" placeholder = "Type 'yes' or 'no' ">
-    <button (click) = "saveCollection(collName.value, isPublic.value)"> Save Collection</button>
+    
+    <br> Is this collection public? <input #isPublic type = "text" id = "isPublic" placeholder = "Type 'yes' or 'no' " value = "no">
+    <button (click) = "saveCollection(collName.value, Desc.value, isPublic.value)"> Save Collection</button>
 </div>
 
 
@@ -86,7 +92,7 @@
 
 <ul>
     <li *ngFor="let name of userCollName; let t = index">
-        <div class = "savedColl">
+        <div class = "savedColl" (click) = "viewUserCollDesc(t)">
             <div id = "collectionTitle">
                 {{name}}<br>
                 <input #rename type="text" placeholder= "New Name">
@@ -94,10 +100,23 @@
                 <button (click) = "deleteCollection(name)"> Delete </button>
             </div>
              
-         <br>
-             <div id = "collectionData">
-                 {{userCollData[t]}}
+             <div *ngIf = "userCollShowed[t]==true">
+                 
+                 <div id = "collectionDesc">
+                    {{userCollDesc[t]}} <br>
+                    <input #newDescription type="text" placeholder= "New Desc">
+                    <button id = "newDescBtn"(click) = "newDesc(newDescription.value, name)"> Change Description </button>
+                    <button (click) = "toggleP(name)"> Toggle Public/Private </button>
+                 </div>
+             
+                 <br>
+             
+                 <div id = "collectionData">
+                     {{userCollData[t]}}
+                 </div>
+                 
              </div>
+             
         </div>
     </li>
 </ul>
@@ -108,17 +127,25 @@
 
 <ul>
     <li *ngFor="let title of pubCollName; let g = index">
-        <div class = "savedColl">
+        <div class = "savedColl" (click) = "viewPubCollDesc(g)">
             <div id = "collectionTitle">
                 {{title}} 
             </div>
+        
+        <div *ngIf = "pubCollShowed[g]==true">
+            <div id = "collectionDesc">
+                {{pubCollDesc[g]}}
+            </div>
              
-         <br>
+             <br>
              <div id = "collectionData">
                  {{pubCollData[g]}}
-                 
-                 
              </div>
+        </div>
+       
         </div>
     </li>
 </ul>
+<br>
+
+<button (click) = "toCopyright()" >View Copyright Policies</button><br>

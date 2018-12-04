@@ -8,24 +8,28 @@ export class CollectiondbService {
   
   private userCollNameArr:string[]=[];
   private userCollDataArr:string[]=[];
+  private userCollDescArr:string[]=[];
   
   private pubCollNameArr:string[]=[];
   private pubCollDataArr:string[]=[];
+  private pubCollDescArr:string[]=[];
   
   private collUser: string;
   private collName: string;
+  private collDesc: string;
   private collData: string;
   private collPublic:boolean;
   
   constructor(private httpClient: HttpClient) { }
   
-  saveCollection(username: string, collectionname: string, isPublic: boolean, collectiondata: string){
+  saveCollection(username: string, collectionname: string, collectiondesc:string, isPublic: boolean, collectiondata: string){
     
     this.httpClient.post(`api/CollectionDatabase/createCollection`, {
       //using the values passed in
       userName: username,
       collectionName: collectionname,
       collectionData: collectiondata,
+      collectionDesc: collectiondesc,
       isPublic: isPublic
       
     })
@@ -52,18 +56,23 @@ export class CollectiondbService {
           database.forEach(ratinginDatabase => {
             this.collUser = ratinginDatabase.userName;
             this.collName = ratinginDatabase.collectionName;
+            this.collDesc = ratinginDatabase.collectionDesc;
             this.collData = ratinginDatabase.collectionData;
             this.collPublic = ratinginDatabase.isPublic;
             
             if (this.collUser == username){ //if the item name is the same as the one passed in, it adds to an array
               
               if (this.collPublic == true){
-                var stringEntry = ("Collection Name: " + this.collName +", Public Collection");
+                var stringEntry = ("Collection Name: " + this.collName +  ", Public Collection");
               }else{
-                var stringEntry = ("Collection Name: " + this.collName +", Private Collection");
+                var stringEntry = ("Collection Name: " + this.collName +  ", Private Collection");
               };
+              
+              var descEntry = "Description: " +this.collDesc;
                 
               var dataEntry = this.collData;
+              
+              this.userCollDescArr.push(descEntry);
               
               this.userCollDataArr.push(dataEntry);
           
@@ -76,6 +85,9 @@ export class CollectiondbService {
     
   }
   
+  getUserCollectionsDescArr() :string[]{
+    return this.userCollDescArr;
+  }
   
   getUserCollectionsNameArr(): string[]{
     return this.userCollNameArr;
@@ -100,15 +112,17 @@ export class CollectiondbService {
           database.forEach(ratinginDatabase => {
             this.collUser = ratinginDatabase.userName;
             this.collName = ratinginDatabase.collectionName;
+            this.collDesc = ratinginDatabase.collectionDesc;
             this.collData = ratinginDatabase.collectionData;
             this.collPublic = ratinginDatabase.isPublic;
             
             if (this.collPublic == true){ //if the item name is the same as the one passed in, it adds to an array
-            
+                
+                var descEntry = "Description: " +this.collDesc;
                 var stringEntry = ("User: " + this.collUser + ", Collection Name: " + this.collName);
                 var dataEntry = this.collData;
                 this.pubCollDataArr.push(dataEntry);
-          
+                this.pubCollDescArr.push(descEntry);
                 this.pubCollNameArr.push(stringEntry);
               
               
@@ -120,6 +134,10 @@ export class CollectiondbService {
   }
   
   
+  getPubCollectionsDescArr(): string[]{
+    return this.pubCollDescArr;
+  }
+  
   getPubCollectionsNameArr(): string[]{
     return this.pubCollNameArr;
   }
@@ -130,6 +148,22 @@ export class CollectiondbService {
   }
   
   
+  updateCollPublic(name:string, ispub: boolean){
+    
+    this.httpClient.post(`api/CollectionDatabase/updateCollPub`, {
+      //using the values passed in
+      collName: name,
+      collPub: ispub
+      
+    })
+    .subscribe(
+      (data:any) => {
+        //console.log(data);
+          console.log(data);
+      }
+      )
+    
+  }
   
   updateCollName(oldname:string, newname:string){
     
@@ -148,6 +182,23 @@ export class CollectiondbService {
     
   }
   
+  
+  updateCollDesc(name:string, newdesc:string){
+    
+    this.httpClient.post(`api/CollectionDatabase/updateCollDesc`, {
+      //using the values passed in
+      collName: name,
+      collDesc: newdesc
+      
+    })
+    .subscribe(
+      (data:any) => {
+        //console.log(data);
+          console.log(data);
+      }
+      )
+    
+  }
   
   deleteCollection(name: string){
     

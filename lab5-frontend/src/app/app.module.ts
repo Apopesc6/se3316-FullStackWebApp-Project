@@ -12,6 +12,8 @@ import { ManagerpageComponent } from './managerpage/managerpage.component';
 import { SignupComponent } from './signup/signup.component';
 import { UnauthenticatedpageComponent } from './unauthenticatedpage/unauthenticatedpage.component';
 import {FormsModule} from '@angular/forms';
+import { SecuritypolicyComponent } from './securitypolicy/securitypolicy.component';
+import { UserpoliciesComponent } from './userpolicies/userpolicies.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import {FormsModule} from '@angular/forms';
     LoginComponent,
     ManagerpageComponent,
     SignupComponent,
-    UnauthenticatedpageComponent
+    UnauthenticatedpageComponent,
+    SecuritypolicyComponent,
+    UserpoliciesComponent
   ],
   imports: [
     BrowserModule,
@@ -57,6 +61,18 @@ import {FormsModule} from '@angular/forms';
       {
         path: 'manager',
         component: ManagerpageComponent
+      },
+      {
+        path: 'security',
+        component: SecuritypolicyComponent
+      },
+      {
+        path: 'userpolicy',
+        component:UserpoliciesComponent
+      },
+      {
+        path: 'authpolicy/:id',
+        component:UserpoliciesComponent
       }
 
     ])

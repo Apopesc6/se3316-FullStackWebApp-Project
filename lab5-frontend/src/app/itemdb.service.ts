@@ -33,6 +33,7 @@ export class ItemdbService {
   constructor(private httpClient: HttpClient) { }
   
   
+  
   getItems() :string[]{
     
     this.httpClient.get(`api/ItemDatabase/allItems`)
@@ -49,7 +50,8 @@ export class ItemdbService {
             this.Description = iteminDatabase.itemDesc;
             this.AmountPurchased = iteminDatabase.itemBuyNo;
             
-            //dictionary used to store each description for each specific item name
+            if (this.Quantity != "0"){
+              //dictionary used to store each description for each specific item name
             this.descArr[this.Name] = this.Description;
             
             //convert the amount purchased retrieved from the database into a string
@@ -63,6 +65,8 @@ export class ItemdbService {
             
             //add a dictionary entry with the amount bought as the index, and the whole string entry
             this.buyNoDict[amountPurchasedInt] = stringEntry;
+            };
+            
             
             //this.itemArray.push(stringEntry);
           });

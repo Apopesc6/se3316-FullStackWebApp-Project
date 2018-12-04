@@ -1,0 +1,22 @@
+<button (click) = "back()"> Back to Manager Page</button> <br> 
+<br>
+
+<h1> Security and Privacy Policy: </h1>
+
+{{currentPolicy}} <br> <br>
+
+<br><textarea value = "{{currentPolicy}}" #newPolicy id = "sec"> </textarea> <br>
+<br><button (click) = "updatePolicy(newPolicy.value)">Update Policy</button><br>
+
+<br>
+
+<br> <h1> DMCA Notice and Takedown Policy: </h1>
+
+{{currentDMCA}} <br> <br>
+
+<br><textarea value = "{{currentDMCA}}" #newDMCA id = "sec"> </textarea> <br>
+<br><button (click) = "updateDMCA(newDMCA.value)">Update DMCA</button> <br>
+
+<h2> Contact Information for Sending Notices of Infringement: </h2>
+<p> Phone: 512-5441-2341 </p>
+<p> Email: JohnDoe@uwo.ca </p>

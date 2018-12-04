@@ -13,6 +13,10 @@ var CollectionInfo = new Schema({
         type: String,
         required: true
     },
+    collectionDesc: {
+        type:String,
+        required: true
+    },
     //Item price is required
     collectionData: {
         type: String,
