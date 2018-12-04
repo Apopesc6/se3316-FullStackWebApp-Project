@@ -13,7 +13,7 @@ export class SecuritypolicyComponent implements OnInit {
   currentPolicy:string;
   currentDMCA:string;
 
-  constructor(private _router: Router, private _pol: PoliciesService ) { }
+  constructor(private _router: Router, private _pol: PoliciesService) { }
 
   ngOnInit() {
     

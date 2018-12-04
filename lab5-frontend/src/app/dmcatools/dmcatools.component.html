@@ -1,0 +1,52 @@
+<button (click) = "back()"> Back</button> <br> 
+<br>
+<h1> DMCA Tools </h1><br>
+
+
+<br><h2> Takedown Requests </h2>
+
+<ul>
+    <li *ngFor="let request of requestArr">
+        
+        {{request}}
+        
+    </li>
+</ul>    
+
+
+<br><textarea  #newReq id = "sec"> </textarea> <br>
+<br><button (click) = "addReq(newReq.value)">Add Request</button><br>
+
+<br><br>
+
+
+
+<br><h2> Infringement Notices </h2>
+
+<ul>
+    <li *ngFor="let notice of noticeArr">
+        
+        {{notice}}
+        
+    </li>
+</ul> 
+
+<br><textarea  #newNot id = "sec"> </textarea> <br>
+<br><button (click) = "addNot(newNot.value)">Add Notice</button><br>
+
+<br><br>
+
+
+
+<br><h2> Dispute Claims </h2>
+
+<ul>
+    <li *ngFor="let dispute of disputeArr">
+        
+        {{dispute}}
+        
+    </li>
+</ul> 
+
+<br><textarea  #newDis id = "sec"> </textarea> <br>
+<br><button (click) = "addDis(newDis.value)">Add Dispute</button><br>

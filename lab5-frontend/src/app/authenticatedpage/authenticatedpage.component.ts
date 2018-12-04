@@ -298,53 +298,81 @@ export class AuthenticatedpageComponent implements OnInit {
   
   
   buy(){
-
-   if(confirm("Are you sure to you want buy these items?")) {
     
-    var receiptEntry:string = "";
+    var buyable:boolean = true;
     
-    //for loop the length of how many items are in the shopping cart
+    
     for (var i = 0; i < this.shoppingCart.length; i++){
       //gets the item name and quantity of the individual shopping cart entry
       var stringEntry = this.shoppingCart[i];
       var itemName = stringEntry.substring(0, (stringEntry.indexOf(',')));
       
-      var itemQuantity = this.quantityShopArr[i];
-    
-      //gets the new quantity of the item by subtracting the old quantity stored in an array, with the quantity in the shopping cart
-      var newQuantity = Number(this.itemQuantityArr[this.shoppingIndexArr[i]]) - Number(itemQuantity);
-      var newQuantitySt = newQuantity.toString();
       
-      //gets the new sales of the item by adding the old sales stored in an array with the quantity in the shopping cart
-      var newSales = Number(this.itemSalesArr[this.shoppingIndexArr[i]]) + Number(itemQuantity);
-      var newSalesSt = newSales.toString();
       
-      //adding values to the receipt
-      if (i == 0){
-        receiptEntry = "[" + stringEntry + "] ";
+      var quan = Number(stringEntry.substring((stringEntry.indexOf(':')+2), stringEntry.indexOf('$')-9));
+      
+      var stock = Number(this.itemQuanDict[itemName]);
+      
+      if(quan > stock){
+        buyable = false;
       }else{
-        receiptEntry = receiptEntry + "[" + stringEntry + "] ";
+        buyable = true;
+      }
+      
+    }
+    
+    if (buyable == true){
+      if(confirm("Are you sure to you want buy these items?")) {
+    
+      var receiptEntry:string = "";
+    
+      //for loop the length of how many items are in the shopping cart
+      for (var i = 0; i < this.shoppingCart.length; i++){
+        //gets the item name and quantity of the individual shopping cart entry
+        var stringEntry = this.shoppingCart[i];
+        var itemName = stringEntry.substring(0, (stringEntry.indexOf(',')));
+      
+        var itemQuantity = this.quantityShopArr[i];
+    
+        //gets the new quantity of the item by subtracting the old quantity stored in an array, with the quantity in the shopping cart
+        var newQuantity = Number(this.itemQuantityArr[this.shoppingIndexArr[i]]) - Number(itemQuantity);
+        var newQuantitySt = newQuantity.toString();
+      
+        //gets the new sales of the item by adding the old sales stored in an array with the quantity in the shopping cart
+        var newSales = Number(this.itemSalesArr[this.shoppingIndexArr[i]]) + Number(itemQuantity);
+        var newSalesSt = newSales.toString();
+      
+        //adding values to the receipt
+        if (i == 0){
+          receiptEntry = "[" + stringEntry + "] ";
+        }else{
+          receiptEntry = receiptEntry + "[" + stringEntry + "] ";
+        };
+      
+      
+        //updates the quantity and sales in the database of the item 
+        this._itemdb.updateItemQuantity(itemName,newQuantitySt);
+        this._itemdb.updateItemSales(itemName, newSalesSt);
+      
+        //does this for each item in the shopping cart
       };
-      
-      
-      //updates the quantity and sales in the database of the item 
-      this._itemdb.updateItemQuantity(itemName,newQuantitySt);
-      this._itemdb.updateItemSales(itemName, newSalesSt);
-      
-      //does this for each item in the shopping cart
-    };
     
-    //shows the user the receipt
-    alert (" Your Receipt: " + receiptEntry + " Subtotal = $" + this.subtotal);
+        //shows the user the receipt
+        alert (" Your Receipt: " + receiptEntry + " Subtotal = $" + this.subtotal);
     
-    setTimeout(() => {
+        setTimeout(() => {
     
-    //reloads the page to update the catalog based on the new database quantities and sales of items
-    window.location.reload();
+        //reloads the page to update the catalog based on the new database quantities and sales of items
+        window.location.reload();
     
-    }, 2000);
+        }, 2000);
     
-   };
+      };
+    }else{
+      alert ("Could not buy, item quantites do not fall within the current stock levels.");
+    }  
+
+   
   }
   
   
@@ -458,10 +486,15 @@ export class AuthenticatedpageComponent implements OnInit {
   
   
   deleteCollection(name){
+    
+    if(confirm("Are you sure to you want to delete this collection?")) {
+    
     var prevname = name.substring((name.indexOf(':')+2), (name.indexOf(',')));
     this._collectiondb.deleteCollection(prevname);
     
     window.location.reload();
+    
+    };
   }
   
   

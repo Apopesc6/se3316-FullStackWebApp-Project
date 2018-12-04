@@ -10,6 +10,7 @@ var collections = require('./CollectionDatabase');
 var managers = require('./ManagerDatabase');
 var security = require('./SecurityDatabase');
 var dmca = require('./DMCADatabase');
+var dmcareq = require('./DMCAReqDatabase');
 var expressApp = express();
 
 //Using mongoose to connect to mongoDB
@@ -39,6 +40,7 @@ expressApp.use('/api/CollectionDatabase', collections);
 expressApp.use('/api/ManagerDatabase', managers);
 expressApp.use('/api/SecurityDatabase', security);
 expressApp.use('/api/DMCADatabase', dmca);
+expressApp.use('/api/DMCAReqDatabase', dmcareq);
 
 
 //Starts listnening

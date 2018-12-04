@@ -21,13 +21,14 @@
             <button (click) = "addRating(item, comment.value, rating.value)"> Add Rating </button>
         </div>
         
-        <br> <input #quantity type = "number" placeholder = "Quantity">
-        <button id= "addtocart" (click) = "addtoCart(item, quantity.value, j)"> Add to Cart </button> 
-        <button (click) = "addtoCollection(item, j, quantity.value)"> Add to Collection </button> 
         
-        <br> <br>
         
         <div *ngIf = "descFound[j]==true">
+            
+            <br> <input #quantity type = "number" placeholder = "Quantity">
+            <button id= "addtocart" (click) = "addtoCart(item, quantity.value, j)"> Add to Cart </button> 
+            <button (click) = "addtoCollection(item, j, quantity.value)"> Add to Collection </button> <br> <br>
+            
             <div id = "descContainer">
                 <strong>Description: </strong><br>
                 <span>{{itemDescription[j]}}</span><br><br>
@@ -92,8 +93,8 @@
 
 <ul>
     <li *ngFor="let name of userCollName; let t = index">
-        <div class = "savedColl" (click) = "viewUserCollDesc(t)">
-            <div id = "collectionTitle">
+        <div class = "savedColl" >
+            <div id = "collectionTitle" (click) = "viewUserCollDesc(t)">
                 {{name}}<br>
                 <input #rename type="text" placeholder= "New Name">
                 <button id = "rename" (click) = "renameCollection(rename.value, name)"> Rename </button>

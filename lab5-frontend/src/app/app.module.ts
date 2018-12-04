@@ -14,6 +14,8 @@ import { UnauthenticatedpageComponent } from './unauthenticatedpage/unauthentica
 import {FormsModule} from '@angular/forms';
 import { SecuritypolicyComponent } from './securitypolicy/securitypolicy.component';
 import { UserpoliciesComponent } from './userpolicies/userpolicies.component';
+import { DMCAdocComponent } from './dmcadoc/dmcadoc.component';
+import { DmcatoolsComponent } from './dmcatools/dmcatools.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { UserpoliciesComponent } from './userpolicies/userpolicies.component';
     SignupComponent,
     UnauthenticatedpageComponent,
     SecuritypolicyComponent,
-    UserpoliciesComponent
+    UserpoliciesComponent,
+    DMCAdocComponent,
+    DmcatoolsComponent
   ],
   imports: [
     BrowserModule,
@@ -73,6 +77,14 @@ import { UserpoliciesComponent } from './userpolicies/userpolicies.component';
       {
         path: 'authpolicy/:id',
         component:UserpoliciesComponent
+      },
+      {
+        path: 'dmcadoc',
+        component: DMCAdocComponent
+      },
+      {
+        path: 'dmcatools',
+        component: DmcatoolsComponent
       }
 
     ])

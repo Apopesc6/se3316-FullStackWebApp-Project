@@ -213,4 +213,12 @@ export class ManagerpageComponent implements OnInit {
   }
   
   
+  toDoc(){
+    this._router.navigateByUrl('/dmcadoc');
+  }
+  
+  logReq(){
+    this._router.navigateByUrl('/dmcatools');
+  }
+  
 }
