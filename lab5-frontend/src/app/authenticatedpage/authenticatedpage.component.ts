@@ -59,41 +59,44 @@ export class AuthenticatedpageComponent implements OnInit {
     //gets the url of the page
     var url = this._router.url;
     
-    
-    //gets the username from the url of the page
-    
+    //gets the username from the url of the page by parsing the string (I passed the username into the url on a successful log in earlier)
     this.loggedinAcc = url.substring(6,url.length);
-    
+      
+    //gets the items from the service and stores it in the component  
     this.items = this._itemdb.getItems();
     
+    //tells the service to get all the user collections and public collections
     this._collectiondb.getUserCollections(this.loggedinAcc);
     this._collectiondb.getPublicCollections();
 
     //waits 1s for the http request
     setTimeout(() => {
       
+      //sets all the public collection array data to what was retrieved by the service
       this.pubCollName = this._collectiondb.getPubCollectionsNameArr();
       this.pubCollData = this._collectiondb.getPubCollectionsDataArr();
       this.pubCollDesc = this._collectiondb.getPubCollectionsDescArr();
       
+      //sets all the user collection array data to what was retrieved by the service
       this.userCollName = this._collectiondb.getUserCollectionsNameArr();
       this.userCollData = this._collectiondb.getUserCollectionsDataArr();
       this.userCollDesc = this._collectiondb.getUserCollectionsDescArr();
       
+      //gets the size of the item list
       this.listSize = this._itemdb.getItemArraySize();
       
       
-      
+      //fills the boolean array with false initially to hide all descriptions 
       for(var num=0;num<this.listSize;num++) {
-        //fills the boolean array with false initially to hide all descriptions 
         this.descFound[num]=false;
       }
       
-      
+      //fills the boolean array with false initially to hide all user collection data 
       for(var i = 0; i<this.userCollName.length;i++){
         this.userCollShowed[i] = false;
       }
       
+      //fills the boolean array with false initially to hide all public collection data 
       for (var i = 0; i<this.pubCollName.length;i++){
         this.pubCollShowed[i] = false;
       }
@@ -172,37 +175,38 @@ export class AuthenticatedpageComponent implements OnInit {
   }
   
   
-  
+  //when the user clicks on their own collection (shows the data under it)
   viewUserCollDesc (index:number){
     
     if (this.userCollShowed[index] == true){
-      //hides the value when clicked again
+      //hides the data when clicked again
       this.userCollShowed[index] = false;
     }else{
-      //sets descFound to true, so when the user clicks it again, hides the value
+      //sets userCollShowed to true, so when the user clicks it again, hides the data
       this.userCollShowed[index] = true;
     };
     
   }
   
   
+  //when the user clicks on a public collections (shows the data under it)
   viewPubCollDesc(index:number){
     
     if (this.pubCollShowed[index] == true){
-      //hides the value when clicked again
+      //hides the data when clicked again
       this.pubCollShowed[index] = false;
     }else{
-      //sets descFound to true, so when the user clicks it again, hides the value
+      //sets pubCollShowed to true, so when the user clicks it again, hides the data
       this.pubCollShowed[index] = true;
     };
   }
+  
   
   
   //When the user clicks the add rating button
   addRating (item, comment:string, rating: number){
     
     //gets the itemname from using substring on the list item
-    
     var itemname = item.substring(6, (item.indexOf('$')-8));
   
     //forces the user to enter a rating between 1 and 5, and not leave the comment blank
@@ -221,7 +225,7 @@ export class AuthenticatedpageComponent implements OnInit {
   }
   
   
-  
+  //When the user clicks the add to cart button
   addtoCart(item, quantity:number, index: number){
     
     //stores the index of the item added to the cart for later use
@@ -266,7 +270,7 @@ export class AuthenticatedpageComponent implements OnInit {
   
   
   
-  
+  //when the user clicks 'delete from cart' under an item in the cart
   deletefromCart(shop, index:number){
     
     //getting the price of the item
@@ -283,8 +287,10 @@ export class AuthenticatedpageComponent implements OnInit {
   
   
   
+  //when the user clicks 'clear cart'
   clearCart(){
     
+    //Asks for confirmation
     if(confirm("Are you sure to you want to clear the cart?")) {
       this.quantityShopArr = [];
       this.shoppingCart = [];
@@ -296,42 +302,47 @@ export class AuthenticatedpageComponent implements OnInit {
   }
   
   
-  
+  //when the user clicks the buy button
   buy(){
     
+    //variable to determine if the buy request can proceed based on the quantities
     var buyable:boolean = true;
-    
     
     for (var i = 0; i < this.shoppingCart.length; i++){
       //gets the item name and quantity of the individual shopping cart entry
       var stringEntry = this.shoppingCart[i];
       var itemName = stringEntry.substring(0, (stringEntry.indexOf(',')));
       
-      
-      
+      //gets the quantity of each individual item in the shopping cart
       var quan = Number(stringEntry.substring((stringEntry.indexOf(':')+2), stringEntry.indexOf('$')-9));
-      
+      //gets the current amount in stock of the item
       var stock = Number(this.itemQuanDict[itemName]);
       
+      //compares for each item
       if(quan > stock){
+        //if one of them has more quanitity than the current amount in stock, break out of the loop, leaving buyable to false.
         buyable = false;
+        break;
       }else{
         buyable = true;
       }
       
     }
     
+    //if buyable is true then it is able to be bought
     if (buyable == true){
+      //confirmation that the user wants to buy the items
       if(confirm("Are you sure to you want buy these items?")) {
-    
+      
+      //variable to store the receipt string
       var receiptEntry:string = "";
     
       //for loop the length of how many items are in the shopping cart
       for (var i = 0; i < this.shoppingCart.length; i++){
+        
         //gets the item name and quantity of the individual shopping cart entry
         var stringEntry = this.shoppingCart[i];
         var itemName = stringEntry.substring(0, (stringEntry.indexOf(',')));
-      
         var itemQuantity = this.quantityShopArr[i];
     
         //gets the new quantity of the item by subtracting the old quantity stored in an array, with the quantity in the shopping cart
@@ -368,12 +379,12 @@ export class AuthenticatedpageComponent implements OnInit {
         }, 2000);
     
       };
-    }else{
+    }else{ //otherwise, shows that the purchase could not be completed 
       alert ("Could not buy, item quantites do not fall within the current stock levels.");
-    }  
-
+    } 
    
   }
+  
   
   
   
@@ -398,12 +409,14 @@ export class AuthenticatedpageComponent implements OnInit {
   }
   
   
+  //deleting an item from the unsaved collection
   deletefromCollection(index: number){
     //removes from the unsaved collection
     this.unsavedColl.splice(index,1);
   }
   
   
+  //when the save collection button is clicked
   saveCollection(collectionName: string, collectionDesc:string, isPubStr:string){
     
     var isPublic: boolean = false;
@@ -439,6 +452,7 @@ export class AuthenticatedpageComponent implements OnInit {
     //calls the function in the service that stores the collection in the database  
     this._collectiondb.saveCollection(this.loggedinAcc, collectionName, collectionDesc, isPublic, stringEntry);
     
+    //empties the array that is displayed in the "add to collection" div and reloads the page
     this.unsavedColl = [];
     window.location.reload();
       
@@ -446,10 +460,15 @@ export class AuthenticatedpageComponent implements OnInit {
     
   }
   
+  
+  
+  //function for renaming the collection
   renameCollection(newname: string, name){
     
+    //gets the previous name of the collection by parsing the title string on screen.
     var prevname = name.substring((name.indexOf(':')+2), (name.indexOf(',')));
-
+    
+    //calls the service function to update the collection name by passing in the previous name and the new name entered.
     this._collectiondb.updateCollName(prevname,newname);
     
     window.location.reload();
@@ -457,64 +476,78 @@ export class AuthenticatedpageComponent implements OnInit {
   }
   
   
+  
+  //function for changing the description of the collection
   newDesc(newdesc: string, name){
     
-    console.log ("test")
-    
+    //gets the name of the collection
     var prevname = name.substring((name.indexOf(':')+2), (name.indexOf(',')));
+    //calls the service function to update the collection description by passing in the previous name and the new description entered.
     this._collectiondb.updateCollDesc(prevname, newdesc);
     
     window.location.reload();
   }
   
   
-  
+  //when the button that toggles if the collection is public or private is clicked
   toggleP(name){
+    //gets the name of the collection
     var prevname = name.substring((name.indexOf(':')+2), (name.indexOf(',')));
+    //gets if the collection is currently public or private
     var isPub = name.substring((name.indexOf(',')+2), (name.length -11));
     
+    //creates a new variable that represents the opposite of what status the collection currently is in (public or private)
     if (isPub == "Private"){
       var newPub = true;
     }else if (isPub == "Public"){
       var newPub = false;
     };
     
+    //calls the service function that updates the collection and reloads the window
     this._collectiondb.updateCollPublic(prevname,newPub);
     
     window.location.reload();
   }
   
   
+  //when the user wants to delete the collection
   deleteCollection(name){
     
+    //asks for confirmation
     if(confirm("Are you sure to you want to delete this collection?")) {
+      //gets the name and calls the service function that will delete the collection
+      var prevname = name.substring((name.indexOf(':')+2), (name.indexOf(',')));
+      this._collectiondb.deleteCollection(prevname);
     
-    var prevname = name.substring((name.indexOf(':')+2), (name.indexOf(',')));
-    this._collectiondb.deleteCollection(prevname);
-    
-    window.location.reload();
+      window.location.reload();
     
     };
   }
   
   
+  //function for updating the quanities of each individual item in the cart
   updateCartQuantity(shop, quantity: number, index:number){
     
+    //gets the item name
     var itemName = shop.substring(0, (shop.indexOf(',')));
     
+    //gets the current amount in stock of that item
     var amountInStock =   Number(this.itemQuanDict[itemName]);
 
-    
+    //forces the user to enter a value between 1 and the amount in stock
     if (quantity < 1){
       alert ("Please enter a quantity greater than 1");
     }else if(quantity>amountInStock){
       alert ("Please enter a quantity less than the amount in stock");
     }else{
       
+      //gets the first half of the string (this is going to be used to create the new string with the updated quantities and prices in the shopping cart)
       var firstHalf = shop.slice(0,shop.indexOf(':')+1);
       
+      //gets the price of that item from the price dictionary (the item name is the index). This along with all dictionaries is loaded at launch.
       var price = this.itemPriceDict[itemName];
       
+      //calculates the new prices based on the new quantity entered ---------------------
       var totalPrice = price * quantity;
       totalPrice = Math.round(totalPrice*100)/100;
       
@@ -524,28 +557,35 @@ export class AuthenticatedpageComponent implements OnInit {
       newPriceAfterTax = Math.round(newPriceAfterTax*100)/100;
       
       var oldPriceAfterTax = Number(shop.substring(shop.indexOf("-")+3,shop.length));
+      //----------------------------------------------------------------------------------
       
+      //gets the difference in prices so it can be added to the subtotal (so the subtotal updates accordingly.)
       var difference = newPriceAfterTax - oldPriceAfterTax;
       
+      //creates the new string entry to be added to the shopping cart
       var stringEntry = firstHalf + " " + quantity + ", Price: $" +totalPrice+ ", Price after Tax - $" +newPriceAfterTax;
       
-      
+      //adds the new string entry to the cart along with the new quantity
       this.quantityShopArr[index] = quantity.toString();
       this.shoppingCart[index] = stringEntry;
       
+      //updates and rounds the subtotal
       this.subtotal = this.subtotal + difference;
       this.subtotal = Math.round(this.subtotal*100)/100;
     }
     
   }
   
+  
+  //when the user wants to view the copyright page, it routes there (passes in the username in the url too, this is used to determine if it is an authenticated or unauthenticated user viewing it, so it knows what page to route back to when "back" is clicked.)
   toCopyright(){
     this._router.navigateByUrl('/authpolicy/'+this.loggedinAcc);
   }
   
+  
+  
   //When the user clicks log out
   backToHome() {
-
     //goes back to the homepage, and resets the username stored in the string
     this._router.navigateByUrl('');
   }

@@ -16,10 +16,11 @@ export class RatingdbService {
 
   constructor(private httpClient: HttpClient) { }
   
+  
+  //add rating for a specific item
   addRating(username: string, itemname: string, comment: string, rating: number){
     
-    console.log (username + " " + itemname + " " + comment + " " + rating);
-    
+    //http client post request to the backend function createRating() in RatingDatabase
     this.httpClient.post(`api/RatingDatabase/createRating`, {
       //using the values passed in
       userName: username,
@@ -68,7 +69,8 @@ export class RatingdbService {
       
       return this.ratingArray;
   }
-
+  
+  //returns array of ratings
   getRatingArrLength(): number{
     return this.ratingArray.length;
   }

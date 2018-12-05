@@ -1,9 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-//Schema used for each item
+//Schema used for each manager
 var ManagerInfo = new Schema({
-    //Item name is required
     userName: {
         type:String,
         required: true
@@ -11,5 +10,5 @@ var ManagerInfo = new Schema({
     
 });
 
-//exports the item schema for ItemDatabase to use
+//exports the manager schema for ManagerDatabase to use
 module.exports = ManagerInfo = mongoose.model('ManagerDatabase', ManagerInfo);

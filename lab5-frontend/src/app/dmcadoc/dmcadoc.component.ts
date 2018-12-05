@@ -13,6 +13,7 @@ export class DMCAdocComponent implements OnInit {
   ngOnInit() {
   }
   
+  //when the back button is clicked, routes back to the manager page.
   backtoManager(){
     this._router.navigateByUrl('/manager');
   }

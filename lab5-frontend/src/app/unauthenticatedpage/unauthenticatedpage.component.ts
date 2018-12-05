@@ -60,23 +60,33 @@ export class UnauthenticatedpageComponent implements OnInit {
       setTimeout(() => {
       //creates a temporary string entry variable  
       var stringEntry:string="";
-      //adds each entry in the array to a single string
+      
+      //if there are less than 5 ratings, uses ratings.length as the for loop parameter
       if(this.ratings.length < 5){
+        //adds all the entries into a string and then are added later into an array that stores all of the ratings for each item
         for(var i=0;i<this.ratings.length;i++){
+          
           if (i == 0){
             stringEntry = (this.ratings[i]);
           }else{
             stringEntry = (stringEntry+" "+this.ratings[i]);
           };
+          
         };
+      
+      //if there are 5 or more ratings, uses 5 as the for loop parameter  
       }else{
+        
         for(var i=0;i<5;i++){
+          
           if (i == 0){
             stringEntry = (this.ratings[i]);
           }else{
             stringEntry = (stringEntry+" "+this.ratings[i]);
           };
+          
         };
+        
       };
         //adds the ratings to the array of the to show next to the appropriate item
         this.ratingArr[listIndex] = stringEntry;
@@ -87,11 +97,11 @@ export class UnauthenticatedpageComponent implements OnInit {
       this.itemDescription[listIndex] = this._itemdb.getDesc(nameString);
     };
     
-    
     this.itemIndex = listIndex;
     
   }
   
+  //routes back to the home page
   backToHome() {
     this._router.navigateByUrl('');
   }

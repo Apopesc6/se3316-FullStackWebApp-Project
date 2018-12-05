@@ -1,9 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-//Schema used for each item
+//Schema used for each dmca request, notice, or dispute
 var DMCAReqInfo = new Schema({
-    //Item name is required
     entry: {
         type:String,
         required: true
@@ -15,5 +14,5 @@ var DMCAReqInfo = new Schema({
     
 });
 
-//exports the item schema for ItemDatabase to use
+//exports the item schema for DMCAReqDatabase to use
 module.exports = DMCAReqInfo = mongoose.model('DMCAReqDatabase', DMCAReqInfo);

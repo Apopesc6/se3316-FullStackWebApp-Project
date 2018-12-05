@@ -1,14 +1,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-//Schema used for each item
+//Schema used for each collection
 var CollectionInfo = new Schema({
-    //Item name is required
     userName: {
         type:String,
         required: true
     },
-    //Item quantity is required
     collectionName: {
         type: String,
         required: true
@@ -17,7 +15,6 @@ var CollectionInfo = new Schema({
         type:String,
         required: true
     },
-    //Item price is required
     collectionData: {
         type: String,
         required: true
@@ -29,5 +26,5 @@ var CollectionInfo = new Schema({
     
 });
 
-//exports the item schema for ItemDatabase to use
+//exports the collection schema for CollectionDatabase to use
 module.exports = CollectionSchema = mongoose.model('CollectionDatabase', CollectionInfo);

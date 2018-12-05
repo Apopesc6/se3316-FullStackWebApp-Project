@@ -1,9 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-//Schema used for each item
+//Schema used for each security policy
 var SecurityInfo = new Schema({
-    //Item name is required
     policy: {
         type:String,
         required: true
@@ -11,5 +10,5 @@ var SecurityInfo = new Schema({
     
 });
 
-//exports the item schema for ItemDatabase to use
+//exports the security schema for SecurityDatabase to use
 module.exports = SecurityInfo = mongoose.model('SecurityDatabase', SecurityInfo);

@@ -19,7 +19,7 @@ mongoose
     .then(() => console.log("MongoDB database connected"))
     .catch(err => console.log(err));
     
-//Allows for the use of GET POST PUT DELETE AND OPTIONS methods
+//Allows for the use of GET POST PUT DELETE AND OPTIONS methods (preventing doing CORS errors)
 expressApp.use(function (req, res, next) {
 
     res.setHeader('Access-Control-Allow-Origin', '*');

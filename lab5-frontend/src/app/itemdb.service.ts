@@ -50,6 +50,7 @@ export class ItemdbService {
             this.Description = iteminDatabase.itemDesc;
             this.AmountPurchased = iteminDatabase.itemBuyNo;
             
+            //doesn't store items with a quantity of 0
             if (this.Quantity != "0"){
               //dictionary used to store each description for each specific item name
             this.descArr[this.Name] = this.Description;
@@ -67,14 +68,12 @@ export class ItemdbService {
             this.buyNoDict[amountPurchasedInt] = stringEntry;
             };
             
-            
-            //this.itemArray.push(stringEntry);
           });
           
       }
       )
     
-    //wait 0.5s to get the http response back
+    //wait 1s to get the http response back
     setTimeout(() => {
     
     //create a new array that sorts the array of amounts bought
@@ -124,13 +123,16 @@ export class ItemdbService {
     return Desc;
   }
       
-      
+  
+  //returns the size of the item array    
   getItemArraySize():number{
     return this.itemArray.length;
   }
   
   
+  //for the manager updating the item quantity
   updateItemQuantity(name: string, quantity: string){
+    //http post request to the backend function updateItemQuantity() in ItemDatabase
     this.httpClient.post(`api/ItemDatabase/updateItemQuantity`, {
       //using the values passed in
       itemName: name,
@@ -146,7 +148,7 @@ export class ItemdbService {
     
   }
   
-  
+  //functions similar to updateItemQuantiity()
   updateItemTax(name: string, tax: string){
     this.httpClient.post(`api/ItemDatabase/updateItemTax`, {
       //using the values passed in
@@ -163,7 +165,7 @@ export class ItemdbService {
     
   }
     
-  
+  //functions similar to updateItemQuantiity()
   updateItemPrice(name: string, price: string){
     
     
@@ -182,6 +184,7 @@ export class ItemdbService {
     
   }
   
+  //functions similar to updateItemQuantiity()
   updateItemDesc(name: string, desc: string){
     
     this.httpClient.post(`api/ItemDatabase/updateItemDesc`, {
@@ -199,6 +202,7 @@ export class ItemdbService {
     
   }
   
+  //functions similar to updateItemQuantiity()
   updateItemName(oldname: string, newname: string){
     
     this.httpClient.post(`api/ItemDatabase/updateItemName`, {
@@ -216,7 +220,7 @@ export class ItemdbService {
     
   }
   
-  
+  //functions similar to updateItemQuantiity()
   updateItemSales(name: string, sales: string){
     this.httpClient.post(`api/ItemDatabase/updateItemSales`, {
       //using the values passed in
@@ -232,7 +236,9 @@ export class ItemdbService {
       )
   }
   
+  //function for deleting the item (used by the manager)
   deleteItem(name:string){
+    //http delete request sent to deleteItem() in ItemDatabase, with name passed in as a parameter in the header.
     this.httpClient.delete(`api/ItemDatabase/deleteItem/${name}`)
       .subscribe(
       (data:any[]) => {

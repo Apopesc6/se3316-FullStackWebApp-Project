@@ -1,9 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-//Schema used for each item
+//Schema used for each dmca policy
 var DMCAInfo = new Schema({
-    //Item name is required
     policy: {
         type:String,
         required: true
@@ -11,5 +10,5 @@ var DMCAInfo = new Schema({
     
 });
 
-//exports the item schema for ItemDatabase to use
+//exports the item schema for DMCADatabase to use
 module.exports = DMCAInfo = mongoose.model('DMCADatabase', DMCAInfo);

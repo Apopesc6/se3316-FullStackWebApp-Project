@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
     this.usernameAcc = username;
     this.passwordAcc = password;
     
-    //passes the username and password to the backend function used to get from the database
+    //passes the username and password to the service that uses an http request to the backend function that sees if there exists a user with these credentials in the database.
     this._auth.getUserDetails(username,password);
     
     //waits 0.5s so it gives time to recieve the http get response
@@ -41,25 +41,22 @@ export class LoginComponent implements OnInit {
       if (this.successfulLogIn == true && this.activeAcc == true){
         
         alert ("Successful login, routing to main page.");
-        
+        //passes username into the url to be used later
         this._router.navigateByUrl('/Auth/'+this.usernameAcc);
        
-      //Otherwise it does not allow logins  
+      //If the account is inactive, it displays a message to contact the manager  
       }else if (this.successfulLogIn == true && this.activeAcc == false){
         
         alert ("Inactive account, please contact your manager.")
-        
-      }else{
-        
-        alert ("Unsuccessful login, try again.");
-        
-      };
       
+      //If the credentials do not match, then it is an unsuccessful log in  
+      }else{
+        alert ("Unsuccessful login, try again.");
+      };
     }, 1000);
-    
-    
   }
 
+  //if log out is clicked, then it routes back to the home page.
   backToHome() {
     this._router.navigateByUrl('');
   }
